@@ -1,45 +1,42 @@
-import 'dart:io';
-
 import 'package:bloc/bloc.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:memory_app/bloc/memory_event.dart';
 import 'package:memory_app/bloc/memory_state.dart';
-import 'package:meta/meta.dart';
+import 'package:memory_app/models/memory_model.dart';
+import 'package:memory_app/repo/memory_repository.dart';
 
 
 class MemoryBloc extends Bloc<MemoryEvent, MemoryState> {
-  MemoryBloc() : super(MemoryInitial()) {
-    
+  final MemoryRepository repository;
 
-    @override
-    Stream<MemoryState> mapEventToState(MemoryEvent event)async*{
-      if (event is SubmitMemory) {
-        yield MemorySubmitting();
-        try {
-          final docRef = FirebaseFirestore.instance.collection('memories').doc();
-          await docRef.set({
-            'name': event.name,
-            'surname': event.surname,
-            'state': event.state,
-            'city': event.city,
-            'memory': event.memory,
-            'timestamp':FieldValue.serverTimestamp(),
-          });
+  MemoryBloc(this.repository) : super(MemoryInitial()) {
+    on<SubmitMemory>(_onSubmitMemory);
+    on<LoadMemories>(_onLoadMemories);
+  }
 
-          //Resim yükleme
-          if (event.imageUrl != null) {
-            final storageRef = FirebaseStorage.instance.ref().child('memories/${docRef.id}');
-            await storageRef.putFile(File(event.imageUrl));
-            final imageUrl = await storageRef.getDownloadURL();
-            await docRef.update({'imageUrl': imageUrl});
-          }
+  void _onSubmitMemory(SubmitMemory event, Emitter<MemoryState> emit) async {
+    emit(MemorySubmitting());
+    try {
+      final memory = Memory(
+        name: event.name,
+        surname: event.surname,
+        state: event.state,
+        city: event.city,
+        memory: event.memory,
+        imageUrl: event.imageUrl,
+      );
+      await repository.addMemory(memory);
+      emit(MemorySubmitted());
+    } catch (e) {
+      emit(MemorySubmitError(e.toString()));
+    }
+  }
 
-          yield MemorySubmitted();
-        } catch (e) {
-          yield MemorySubmitError(e.toString());
-        }
-      }
+  void _onLoadMemories(LoadMemories event, Emitter<MemoryState> emit) async {
+    try {
+      final memories = await repository.getMemories().first;
+      emit(MemoriesLoaded(memories));
+    } catch (e) {
+      emit(MemoryLoadError(e.toString()));
     }
   }
 }
