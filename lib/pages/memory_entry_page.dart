@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -8,6 +11,7 @@ import 'package:memory_app/theme/text_theme.dart';
 import 'package:memory_app/widgets/custom_button.dart';
 import 'package:memory_app/widgets/custom_dropdown_field.dart';
 import 'package:memory_app/widgets/custom_textfield.dart';
+import 'package:path/path.dart' as path;
 
 class MemoryEntryPage extends StatefulWidget {
   const MemoryEntryPage({Key? key}) : super(key: key);
@@ -24,14 +28,30 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
   bool isChecked = false;
   String? selectedState;
   String? selectedCity;
+  String? selectedMosque;
   XFile? image;
+  String? imageUrl;
+
   final List<String> states = ["Hamburg", "Bremen", "Berlin", "Hessen"];
   final Map<String, List<String>> cities = {
-    "Hamburg": ["City1-1", "City1-2", "City1-3"],
-    "Bremen": ["City2-1", "City2-2", "City2-3"],
-    "Berlin": ["City3-1", "City3-2", "City3-3"],
-    "Hessen": ["City4-1", "City4-2", "City4-3"],
+    "Hamburg": ["Hamburg City", "Altona", "Eimsbüttel"],
+    "Bremen": ["Bremen City", "Bremerhaven"],
+    "Berlin": ["Berlin City", "Mitte", "Friedrichshain-Kreuzberg"],
+    "Hessen": ["Frankfurt", "Wiesbaden", "Kassel"],
   };
+
+  final List<String> mosque = [
+    "Cologne Central Mosque",
+    "Berlin Sehitlik Mosque",
+    "Essen DITIB Merkez Camii",
+    "Duisburg Merkez Moschee",
+    "Frankfurt Nida Moschee",
+    "Hamburg Merkez Camii",
+    "Mannheim DITIB Yunus Emre Camii",
+    "Stuttgart Zentral Moschee",
+    "Nuremberg Süleymaniye Moschee",
+    "Dortmund Kuba Camii"
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -48,19 +68,24 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
               ),
             );
           } else if (state is MemorySubmitted) {
-            showDialog(context: context, builder: (BuildContext context){
-              return AlertDialog(
-                title: Text("Başarılı"),
-                content: Text("Hatıra başarıyla gönderildi"),
-                actions: [
-                  TextButton(onPressed: (){
-                    Navigator.pop(context);
-                    _refreshPage();
-                  }, child: Text("Tamam"))
-                ],
-              );
-            });
-            
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text("Başarılı"),
+                  content: Text("Hatıra başarıyla gönderildi"),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        _refreshPage();
+                      },
+                      child: Text("Tamam"),
+                    )
+                  ],
+                );
+              },
+            );
           } else if (state is MemorySubmitError) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -72,11 +97,10 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
         child: Form(
           key: _formKey,
           child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 2),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 5),
                 Text("Ad", style: AppTextTheme.kLabelStyle),
                 CustomTextField(
                   controller: nameController,
@@ -141,7 +165,23 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
                     return null;
                   },
                 ),
-                SizedBox(height: 5),
+                Text("Cami", style: AppTextTheme.kLabelStyle),
+                CustomDropdownField(
+                  value: selectedMosque,
+                  items: mosque,
+                  labelText: 'Cami',
+                  onChanged: (value) {
+                    setState(() {
+                      selectedMosque = value;
+                    });
+                  },
+                  validator: (value) {
+                    if (value == null) {
+                      return 'Lütfen bir cami seçin';
+                    }
+                    return null;
+                  },
+                ),
                 Text("Hatıra", style: AppTextTheme.kLabelStyle),
                 TextFormField(
                   controller: memoryController,
@@ -169,9 +209,15 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
                   minLines: 5, // Minimum 5 satır genişlik
                   maxLines: null, // İçerik arttıkça genişleyecek
                 ),
-                SizedBox(height: 5),
+                if (image != null)
+                  Image.file(
+                    File(image!.path),
+                    height: 200,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
                 GestureDetector(
-                  onTap: _pickImage, // Resim seçme işlevini çağırın
+                  onTap: _pickImage,
                   child: Container(
                     padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
                     decoration: BoxDecoration(
@@ -198,7 +244,6 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
                     ),
                   ),
                 ),
-                SizedBox(height: 5),
                 CheckboxListTile(
                   title: Text('Okudum ve kabul ediyorum'),
                   value: isChecked,
@@ -226,9 +271,36 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
   Future<void> _pickImage() async {
     final pickedImage =
         await ImagePicker().pickImage(source: ImageSource.gallery);
-    setState(() {
-      image = pickedImage;
-    });
+    if (pickedImage != null) {
+      setState(() {
+        image = pickedImage;
+      });
+
+      String? url = await _uploadImageToFirebase();
+      if (url != null) {
+        setState(() {
+          imageUrl = url;
+        });
+      }
+    }
+  }
+
+  Future<String?> _uploadImageToFirebase() async {
+    try {
+      String fileName = path.basename(image!.path);
+      Reference firebaseStorageRef =
+          FirebaseStorage.instance.ref().child('images/$fileName');
+      UploadTask uploadTask = firebaseStorageRef.putFile(File(image!.path));
+      TaskSnapshot taskSnapshot = await uploadTask;
+      String downloadURL = await taskSnapshot.ref.getDownloadURL();
+      print(
+          "Download URL from Firebase Storage: $downloadURL"); // Debug çıktısı ekle
+      return downloadURL;
+    } catch (e, stackTrace) {
+      print("Error uploading image: $e");
+      print("Stack trace: $stackTrace");
+      return null;
+    }
   }
 
   void _submitMemory() {
@@ -239,22 +311,23 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
         state: selectedState!,
         city: selectedCity!,
         memory: memoryController.text,
-        imageUrl: image?.path ?? '', // image null ise boş string gönder
+        imageUrl: imageUrl ?? '', // URL'yi ekle
       ));
     }
   }
 
-
   void _refreshPage() {
-    // setState içinde sayfanın yenilenmiş halini göstermek için gerekli işlemleri yapın
-    // Örneğin, formu temizlemek için controller'ları sıfırlayabilirsiniz:
-    nameController.clear();
-    surnameController.clear();
-    memoryController.clear();
-    selectedState = null;
-    selectedCity = null;
-    isChecked = false;
-    image = null;
+    setState(() {
+      // Formu ve seçilen resimleri sıfırla
+      nameController.clear();
+      surnameController.clear();
+      memoryController.clear();
+      selectedState = null;
+      selectedCity = null;
+      selectedMosque = null;
+      isChecked = false;
+      image = null;
+      imageUrl = null; // URL'yi sıfırla
+    });
   }
-
 }
