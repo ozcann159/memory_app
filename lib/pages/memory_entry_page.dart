@@ -48,12 +48,19 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
               ),
             );
           } else if (state is MemorySubmitted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Hatıra başarıyla gönderildi'),
-              ),
-            );
-            Navigator.pop(context);
+            showDialog(context: context, builder: (BuildContext context){
+              return AlertDialog(
+                title: Text("Başarılı"),
+                content: Text("Hatıra başarıyla gönderildi"),
+                actions: [
+                  TextButton(onPressed: (){
+                    Navigator.pop(context);
+                    _refreshPage();
+                  }, child: Text("Tamam"))
+                ],
+              );
+            });
+            
           } else if (state is MemorySubmitError) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -236,4 +243,18 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
       ));
     }
   }
+
+
+  void _refreshPage() {
+    // setState içinde sayfanın yenilenmiş halini göstermek için gerekli işlemleri yapın
+    // Örneğin, formu temizlemek için controller'ları sıfırlayabilirsiniz:
+    nameController.clear();
+    surnameController.clear();
+    memoryController.clear();
+    selectedState = null;
+    selectedCity = null;
+    isChecked = false;
+    image = null;
+  }
+
 }
