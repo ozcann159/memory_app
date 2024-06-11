@@ -4,6 +4,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:memory_app/bloc/memory_bloc.dart';
 import 'package:memory_app/bloc/memory_event.dart';
 import 'package:memory_app/bloc/memory_state.dart';
+import 'package:memory_app/theme/text_theme.dart';
+import 'package:memory_app/widgets/custom_button.dart';
+import 'package:memory_app/widgets/custom_dropdown_field.dart';
+import 'package:memory_app/widgets/custom_textfield.dart';
 
 class MemoryEntryPage extends StatefulWidget {
   const MemoryEntryPage({Key? key}) : super(key: key);
@@ -14,23 +18,26 @@ class MemoryEntryPage extends StatefulWidget {
 
 class _MemoryEntryPageState extends State<MemoryEntryPage> {
   final _formKey = GlobalKey<FormState>();
-  late String name, surname, memory;
+  TextEditingController nameController = TextEditingController();
+  TextEditingController surnameController = TextEditingController();
+  TextEditingController memoryController = TextEditingController();
+  bool isChecked = false;
   String? selectedState;
   String? selectedCity;
   XFile? image;
   final List<String> states = ["Hamburg", "Bremen", "Berlin", "Hessen"];
   final Map<String, List<String>> cities = {
-    "Hamburg": ["City1-1", "City2-2", "City3-3"],
-    "Bremen": ["City1-1", "City2-2", "City3-3"],
-    "Berlin": ["City1-1", "City2-2", "City3-3"],
-    "Hessen": ["City1-1", "City2-2", "City3-3"],
+    "Hamburg": ["City1-1", "City1-2", "City1-3"],
+    "Bremen": ["City2-1", "City2-2", "City2-3"],
+    "Berlin": ["City3-1", "City3-2", "City3-3"],
+    "Hessen": ["City4-1", "City4-2", "City4-3"],
   };
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Hatıra Yaz'),
+        title: const Text('Hatıra Yaz'),
       ),
       body: BlocListener<MemoryBloc, MemoryState>(
         listener: (context, state) {
@@ -58,42 +65,45 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
         child: Form(
           key: _formKey,
           child: SingleChildScrollView(
-            padding: EdgeInsets.all(16.0),
+            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                TextFormField(
-                  decoration: InputDecoration(labelText: 'isim'),
-                  onSaved: (value) => name = value!,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Lütfen isminizi girin';
-                    }
-                    return null;
-                  },
+                SizedBox(height: 5),
+                Text("Ad", style: AppTextTheme.kLabelStyle),
+                CustomTextField(
+                  controller: nameController,
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: Color(0xffd1d8ff),
+                    ),
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  inputHint: 'Adınızı Giriniz',
                 ),
-                TextFormField(
-                  decoration: InputDecoration(labelText: 'Soyisim'),
-                  onSaved: (value) => surname = value!,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Lütfen soyisminizi girin';
-                    }
-                    return null;
-                  },
+                SizedBox(height: 5),
+                Text("Soyad", style: AppTextTheme.kLabelStyle),
+                CustomTextField(
+                  controller: surnameController,
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: Color(0xffd1d8ff),
+                    ),
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  inputHint: 'Soyadınızı Giriniz',
                 ),
-                DropdownButtonFormField<String>(
-                  decoration: InputDecoration(labelText: 'Eyalet'),
+                SizedBox(height: 5),
+                Text("Eyalet", style: AppTextTheme.kLabelStyle),
+                CustomDropdownField(
                   value: selectedState,
-                  items: states.map((String state) {
-                    return DropdownMenuItem<String>(
-                      value: state,
-                      child: Text(state),
-                    );
-                  }).toList(),
+                  items: states,
+                  labelText: 'Eyalet',
                   onChanged: (value) {
                     setState(() {
-                      selectedState = value!;
-                      selectedCity = null;
+                      selectedState = value;
+                      selectedCity =
+                          null; // Eyalet değiştiğinde şehir sıfırlanır
                     });
                   },
                   validator: (value) {
@@ -103,20 +113,18 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
                     return null;
                   },
                 ),
-                DropdownButtonFormField<String>(
-                  decoration: InputDecoration(labelText: 'Şehir'),
+                SizedBox(height: 5),
+                Text("Şehir", style: AppTextTheme.kLabelStyle),
+                CustomDropdownField(
                   value: selectedCity,
-                  items: selectedState == null
-                      ? []
-                      : cities[selectedState]?.map((String city) {
-                          return DropdownMenuItem<String>(
-                            value: city,
-                            child: Text(city),
-                          );
-                        }).toList(),
+                  items:
+                      selectedState != null && cities.containsKey(selectedState)
+                          ? cities[selectedState]!
+                          : [],
+                  labelText: 'Şehir',
                   onChanged: (value) {
                     setState(() {
-                      selectedCity = value!;
+                      selectedCity = value;
                     });
                   },
                   validator: (value) {
@@ -126,9 +134,21 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
                     return null;
                   },
                 ),
+                SizedBox(height: 5),
+                Text("Hatıra", style: AppTextTheme.kLabelStyle),
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'Hatıra'),
-                  onSaved: (value) => memory = value!,
+                  controller: memoryController,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: Color(0xffd1d8ff),
+                      ),
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                    labelText: 'Hatıra',
+                  ),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Lütfen hatıranızı yazın';
@@ -139,14 +159,54 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
                     return null;
                   },
                   maxLength: 1000,
+                  minLines: 5, // Minimum 5 satır genişlik
+                  maxLines: null, // İçerik arttıkça genişleyecek
                 ),
-                ElevatedButton(
-                  onPressed: _pickImage,
-                  child: Text('Resim Ekle'),
+                SizedBox(height: 5),
+                GestureDetector(
+                  onTap: _pickImage, // Resim seçme işlevini çağırın
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                    decoration: BoxDecoration(
+                      color: Colors.blue,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.add_a_photo,
+                          color: Colors.white,
+                        ),
+                        SizedBox(width: 8),
+                        Text(
+                          'Resim Ekle',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-                ElevatedButton(
-                  onPressed: _submitMemory,
-                  child: Text('Gönder'),
+                SizedBox(height: 5),
+                CheckboxListTile(
+                  title: Text('Okudum ve kabul ediyorum'),
+                  value: isChecked,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      isChecked = value ?? false;
+                    });
+                  },
+                  controlAffinity: ListTileControlAffinity.leading,
+                ),
+                CustomButton(
+                  buttonText: 'Gönder',
+                  buttonColor: Colors.white,
+                  onTap: _submitMemory,
+                  size: 16,
                 ),
               ],
             ),
@@ -157,22 +217,22 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
   }
 
   Future<void> _pickImage() async {
-    final pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
+    final pickedImage =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
     setState(() {
-      image = pickedImage!;
+      image = pickedImage;
     });
   }
 
   void _submitMemory() {
-    if (_formKey.currentState!.validate()) {
-      _formKey.currentState!.save();
+    if (_formKey.currentState!.validate() && isChecked) {
       BlocProvider.of<MemoryBloc>(context).add(SubmitMemory(
-        name: name,
-        surname: surname,
+        name: nameController.text,
+        surname: surnameController.text,
         state: selectedState!,
         city: selectedCity!,
-        memory: memory,
-        imageUrl: image!.path,
+        memory: memoryController.text,
+        imageUrl: image?.path ?? '', // image null ise boş string gönder
       ));
     }
   }
