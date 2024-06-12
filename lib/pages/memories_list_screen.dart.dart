@@ -32,7 +32,7 @@ class MemoryListPage extends StatelessWidget {
               return ListTile(
                 title: Text(memory.city),
                 subtitle: Text(memory.memory),
-                leading: Image.network(memory.imageUrl), // Resmi göster
+                leading: Image.network(memory.imageUrl), 
               );
             },
           );
