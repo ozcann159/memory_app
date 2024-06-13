@@ -7,6 +7,7 @@ class Memory {
   final String city;
   final String memory;
   final String imageUrl;
+  final String mosque;
 
   Memory({
     required this.name,
@@ -15,6 +16,7 @@ class Memory {
     required this.city,
     required this.memory,
     required this.imageUrl,
+    required this.mosque,
   });
 
   Map<String, dynamic> toMap() {
@@ -25,6 +27,7 @@ class Memory {
       'city': city,
       'memory': memory,
       'imageUrl': imageUrl,
+      'mosque': mosque,
     };
   }
 
@@ -37,6 +40,7 @@ class Memory {
       city: data['city'] ?? '',
       memory: data['memory'] ?? '',
       imageUrl: data['imageUrl'] ?? '',
+      mosque: data['mosque'] ?? '',
     );
   }
 }

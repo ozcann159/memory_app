@@ -40,7 +40,7 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
     "Hessen": ["Frankfurt", "Wiesbaden", "Kassel"],
   };
 
-  final List<String> mosque = [
+  final List<String> mosques = [
     "Cologne Central Mosque",
     "Berlin Sehitlik Mosque",
     "Essen DITIB Merkez Camii",
@@ -168,7 +168,7 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
                 Text("Cami", style: AppTextTheme.kLabelStyle),
                 CustomDropdownField(
                   value: selectedMosque,
-                  items: mosque,
+                  items: mosques,
                   labelText: 'Cami',
                   onChanged: (value) {
                     setState(() {
@@ -312,6 +312,7 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
         city: selectedCity!,
         memory: memoryController.text,
         imageUrl: imageUrl ?? '', // URL'yi ekle
+        mosque: selectedMosque!, 
       ));
     }
   }

@@ -4,7 +4,6 @@ import 'package:memory_app/bloc/memory_state.dart';
 import 'package:memory_app/models/memory_model.dart';
 import 'package:memory_app/repo/memory_repository.dart';
 
-
 class MemoryBloc extends Bloc<MemoryEvent, MemoryState> {
   final MemoryRepository repository;
 
@@ -23,6 +22,8 @@ class MemoryBloc extends Bloc<MemoryEvent, MemoryState> {
         city: event.city,
         memory: event.memory,
         imageUrl: event.imageUrl,
+        mosque: event.mosque
+        
       );
       await repository.addMemory(memory);
       emit(MemorySubmitted());

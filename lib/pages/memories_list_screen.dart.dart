@@ -39,7 +39,7 @@ class MemoryListPage extends StatelessWidget {
             itemBuilder: (context, index) {
               Memory memory = snapshot.data![index];
               return ListTile(
-                title: Text(memory.city),
+                title: Text(memory.mosque),
                 subtitle: Text(memory.memory),
                 leading: Image.network(memory.imageUrl),
                 onTap: () {

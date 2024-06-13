@@ -14,6 +14,7 @@ class SubmitMemory extends MemoryEvent {
   final String city;
   final String memory;
   final String imageUrl;
+  final String mosque;
 
   const SubmitMemory({
     required this.name,
@@ -22,6 +23,7 @@ class SubmitMemory extends MemoryEvent {
     required this.city,
     required this.memory,
     required this.imageUrl,
+    required this.mosque,
   });
 
   @override
