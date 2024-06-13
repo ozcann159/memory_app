@@ -22,7 +22,8 @@ class MemoryBloc extends Bloc<MemoryEvent, MemoryState> {
         city: event.city,
         memory: event.memory,
         imageUrl: event.imageUrl,
-        mosque: event.mosque
+        mosque: event.mosque,
+        date: DateTime.now(),
         
       );
       await repository.addMemory(memory);
@@ -34,7 +35,7 @@ class MemoryBloc extends Bloc<MemoryEvent, MemoryState> {
 
   void _onLoadMemories(LoadMemories event, Emitter<MemoryState> emit) async {
     try {
-      final memories = await repository.getMemories().first;
+      final memories = await repository.getMemoriesOrderedByDate().first;
       emit(MemoriesLoaded(memories));
     } catch (e) {
       emit(MemoryLoadError(e.toString()));

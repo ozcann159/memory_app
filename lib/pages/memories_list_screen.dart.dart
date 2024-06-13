@@ -22,7 +22,7 @@ class MemoryListPage extends StatelessWidget {
         ],
       ),
       body: StreamBuilder<List<Memory>>(
-        stream: memoryRepository.getMemories(),
+        stream: memoryRepository.getMemoriesOrderedByDate(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
@@ -34,10 +34,12 @@ class MemoryListPage extends StatelessWidget {
               child: Text('Henüz bir hatıra yok.'),
             );
           }
+          print("Snapshot data length: ${snapshot.data!.length}"); 
           return ListView.builder(
             itemCount: snapshot.data!.length,
             itemBuilder: (context, index) {
               Memory memory = snapshot.data![index];
+              print("Memory: ${memory.toMap()}"); 
               return ListTile(
                 title: Text(memory.mosque),
                 subtitle: Text(memory.memory),

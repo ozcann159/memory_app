@@ -1,13 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Memory {
-  final String name;
-  final String surname;
-  final String state;
-  final String city;
-  final String memory;
-  final String imageUrl;
-  final String mosque;
+  String name;
+  String surname;
+  String state;
+  String city;
+  String memory;
+  String imageUrl;
+  String mosque;
+  DateTime date;
 
   Memory({
     required this.name,
@@ -17,7 +18,22 @@ class Memory {
     required this.memory,
     required this.imageUrl,
     required this.mosque,
+    required this.date,
   });
+
+  factory Memory.fromDocument(DocumentSnapshot doc) {
+    final data = doc.data() as Map<String, dynamic>;
+    return Memory(
+      name: data['name'],
+      surname: data['surname'],
+      state: data['state'],
+      city: data['city'],
+      memory: data['memory'],
+      imageUrl: data['imageUrl'],
+      mosque: data['mosque'],
+      date: (data['date'] as Timestamp).toDate(),
+    );
+  }
 
   Map<String, dynamic> toMap() {
     return {
@@ -28,19 +44,7 @@ class Memory {
       'memory': memory,
       'imageUrl': imageUrl,
       'mosque': mosque,
+      'date': date,
     };
-  }
-
-  static Memory fromDocument(DocumentSnapshot doc) {
-    final data = doc.data() as Map<String, dynamic>;
-    return Memory(
-      name: data['name'] ?? '',
-      surname: data['surname'] ?? '',
-      state: data['state'] ?? '',
-      city: data['city'] ?? '',
-      memory: data['memory'] ?? '',
-      imageUrl: data['imageUrl'] ?? '',
-      mosque: data['mosque'] ?? '',
-    );
   }
 }
