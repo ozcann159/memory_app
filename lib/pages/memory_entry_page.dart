@@ -94,173 +94,181 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
             );
           }
         },
-        child: Form(
-          key: _formKey,
-          child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 2),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("Ad", style: AppTextTheme.kLabelStyle),
-                CustomTextField(
-                  controller: nameController,
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Color(0xffd1d8ff),
-                    ),
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                  inputHint: 'Adınızı Giriniz',
-                ),
-                SizedBox(height: 5),
-                Text("Soyad", style: AppTextTheme.kLabelStyle),
-                CustomTextField(
-                  controller: surnameController,
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Color(0xffd1d8ff),
-                    ),
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                  inputHint: 'Soyadınızı Giriniz',
-                ),
-                SizedBox(height: 5),
-                Text("Eyalet", style: AppTextTheme.kLabelStyle),
-                CustomDropdownField(
-                  value: selectedState,
-                  items: states,
-                  labelText: 'Eyalet',
-                  onChanged: (value) {
-                    setState(() {
-                      selectedState = value;
-                      selectedCity =
-                          null; // Eyalet değiştiğinde şehir sıfırlanır
-                    });
-                  },
-                  validator: (value) {
-                    if (value == null) {
-                      return 'Lütfen bir eyalet seçin';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 5),
-                Text("Şehir", style: AppTextTheme.kLabelStyle),
-                CustomDropdownField(
-                  value: selectedCity,
-                  items:
-                      selectedState != null && cities.containsKey(selectedState)
-                          ? cities[selectedState]!
-                          : [],
-                  labelText: 'Şehir',
-                  onChanged: (value) {
-                    setState(() {
-                      selectedCity = value;
-                    });
-                  },
-                  validator: (value) {
-                    if (value == null) {
-                      return 'Lütfen bir şehir seçin';
-                    }
-                    return null;
-                  },
-                ),
-                Text("Cami", style: AppTextTheme.kLabelStyle),
-                CustomDropdownField(
-                  value: selectedMosque,
-                  items: mosques,
-                  labelText: 'Cami',
-                  onChanged: (value) {
-                    setState(() {
-                      selectedMosque = value;
-                    });
-                  },
-                  validator: (value) {
-                    if (value == null) {
-                      return 'Lütfen bir cami seçin';
-                    }
-                    return null;
-                  },
-                ),
-                Text("Hatıra", style: AppTextTheme.kLabelStyle),
-                TextFormField(
-                  controller: memoryController,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                        color: Color(0xffd1d8ff),
-                      ),
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                    contentPadding:
-                        EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-                    labelText: 'Hatıra',
-                  ),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Lütfen hatıranızı yazın';
-                    }
-                    if (value.length > 1000) {
-                      return 'Hatıra 1000 karakterden fazla olamaz';
-                    }
-                    return null;
-                  },
-                  maxLength: 1000,
-                  minLines: 5, // Minimum 5 satır genişlik
-                  maxLines: null, // İçerik arttıkça genişleyecek
-                ),
-                if (image != null)
-                  Image.file(
-                    File(image!.path),
-                    height: 200,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                  ),
-                GestureDetector(
-                  onTap: _pickImage,
-                  child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-                    decoration: BoxDecoration(
-                      color: Colors.blue,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: const Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.add_a_photo,
-                          color: Colors.white,
+        child: Center(
+          child: Container(
+            width: MediaQuery.of(context).size.width * 12,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Form(
+                key: _formKey,
+                child: SingleChildScrollView(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 15, vertical: 1),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Ad", style: AppTextTheme.kLabelStyle),
+                      CustomTextField(
+                        controller: nameController,
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: Color(0xffd1d8ff),
+                          ),
+                          borderRadius: BorderRadius.circular(14),
                         ),
-                        SizedBox(width: 8),
-                        Text(
-                          'Resim Ekle',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                        inputHint: 'Adınızı Giriniz',
+                      ),
+                      Text("Soyad", style: AppTextTheme.kLabelStyle),
+                      CustomTextField(
+                        controller: surnameController,
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: Color(0xffd1d8ff),
+                          ),
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                        inputHint: 'Soyadınızı Giriniz',
+                      ),
+                      SizedBox(height: 5),
+                      Text("Eyalet", style: AppTextTheme.kLabelStyle),
+                      CustomDropdownField(
+                        value: selectedState,
+                        items: states,
+                        labelText: 'Eyalet',
+                        onChanged: (value) {
+                          setState(() {
+                            selectedState = value;
+                            selectedCity = null;
+                          });
+                        },
+                        validator: (value) {
+                          if (value == null) {
+                            return 'Lütfen bir eyalet seçin';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 3),
+                      Text("Şehir", style: AppTextTheme.kLabelStyle),
+                      CustomDropdownField(
+                        value: selectedCity,
+                        items: selectedState != null &&
+                                cities.containsKey(selectedState)
+                            ? cities[selectedState]!
+                            : [],
+                        labelText: 'Şehir',
+                        onChanged: (value) {
+                          setState(() {
+                            selectedCity = value;
+                          });
+                        },
+                        validator: (value) {
+                          if (value == null) {
+                            return 'Lütfen bir şehir seçin';
+                          }
+                          return null;
+                        },
+                      ),
+                      Text("Cami", style: AppTextTheme.kLabelStyle),
+                      CustomDropdownField(
+                        value: selectedMosque,
+                        items: mosques,
+                        labelText: 'Cami',
+                        onChanged: (value) {
+                          setState(() {
+                            selectedMosque = value;
+                          });
+                        },
+                        validator: (value) {
+                          if (value == null) {
+                            return 'Lütfen bir cami seçin';
+                          }
+                          return null;
+                        },
+                      ),
+                      Text("Hatıra", style: AppTextTheme.kLabelStyle),
+                      TextFormField(
+                        controller: memoryController,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Color(0xffd1d8ff),
+                            ),
+                            borderRadius: BorderRadius.circular(14),
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(
+                              vertical: 12, horizontal: 16),
+                          labelText: 'Hatıra',
+                        ),
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Lütfen hatıranızı yazın';
+                          }
+                          if (value.length > 1000) {
+                            return 'Hatıra 1000 karakterden fazla olamaz';
+                          }
+                          return null;
+                        },
+                        maxLength: 1000,
+                        minLines: 5,
+                        maxLines: null,
+                      ),
+                      if (image != null)
+                        Image.file(
+                          File(image!.path),
+                          height: 200,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                        ),
+                      GestureDetector(
+                        onTap: _pickImage,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 20),
+                          decoration: BoxDecoration(
+                            color: Colors.blue,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: const Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.add_a_photo,
+                                color: Colors.white,
+                              ),
+                              SizedBox(width: 5),
+                              Text(
+                                'Resim Ekle',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                      CheckboxListTile(
+                        title: Text('Okudum ve kabul ediyorum'),
+                        value: isChecked,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            isChecked = value ?? false;
+                          });
+                        },
+                        controlAffinity: ListTileControlAffinity.leading,
+                      ),
+                      CustomButton(
+                        buttonText: 'Gönder',
+                        buttonColor: Colors.white,
+                        onTap: _submitMemory,
+                        size: 16,
+                      ),
+                    ],
                   ),
                 ),
-                CheckboxListTile(
-                  title: Text('Okudum ve kabul ediyorum'),
-                  value: isChecked,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      isChecked = value ?? false;
-                    });
-                  },
-                  controlAffinity: ListTileControlAffinity.leading,
-                ),
-                CustomButton(
-                  buttonText: 'Gönder',
-                  buttonColor: Colors.white,
-                  onTap: _submitMemory,
-                  size: 16,
-                ),
-              ],
+              ),
             ),
           ),
         ),
@@ -293,8 +301,7 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
       UploadTask uploadTask = firebaseStorageRef.putFile(File(image!.path));
       TaskSnapshot taskSnapshot = await uploadTask;
       String downloadURL = await taskSnapshot.ref.getDownloadURL();
-      print(
-          "Download URL from Firebase Storage: $downloadURL"); // Debug çıktısı ekle
+      print("Download URL from Firebase Storage: $downloadURL");
       return downloadURL;
     } catch (e, stackTrace) {
       print("Error uploading image: $e");
@@ -312,14 +319,13 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
         city: selectedCity!,
         memory: memoryController.text,
         imageUrl: imageUrl ?? '', // URL'yi ekle
-        mosque: selectedMosque!, 
+        mosque: selectedMosque!,
       ));
     }
   }
 
   void _refreshPage() {
     setState(() {
-      // Formu ve seçilen resimleri sıfırla
       nameController.clear();
       surnameController.clear();
       memoryController.clear();
@@ -328,7 +334,7 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
       selectedMosque = null;
       isChecked = false;
       image = null;
-      imageUrl = null; // URL'yi sıfırla
+      imageUrl = null;
     });
   }
 }
