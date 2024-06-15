@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:memory_app/models/memory_model.dart';
 import 'package:memory_app/pages/memory_details_screen.dart';
 import 'package:memory_app/pages/memory_entry_page.dart';
 import 'package:memory_app/repo/memory_repository.dart';
-import 'package:intl/intl.dart'; 
 
 class MemoryListPage extends StatelessWidget {
   final MemoryRepository memoryRepository = MemoryRepository();
@@ -56,46 +56,48 @@ class MemoryListPage extends StatelessWidget {
                     ),
                   );
                 },
-                child: Card(
-                  margin: EdgeInsets.all(8),
-                  elevation: 3,
-                  child: Padding(
-                    padding: EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          memory.mosque,
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.blue,
-                          ),
-                        ),
-                        SizedBox(height: 8),
-                        Text(
-                          memory.memory,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(fontSize: 16),
-                        ),
-                        SizedBox(height: 8),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              // Tarihi biçimlendirme
-                              DateFormat('dd.MM.yyyy HH:mm')
-                                  .format(memory.date),
-                              style: TextStyle(
-                                color: Colors.green,
-                                fontWeight: FontWeight.bold,
-                              ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Card(
+                    margin: EdgeInsets.all(8),
+                    elevation: 3,
+                    child: Padding(
+                      padding: EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            memory.mosque,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blue,
                             ),
-                            Icon(Icons.arrow_forward_ios),
-                          ],
-                        ),
-                      ],
+                          ),
+                          SizedBox(height: 8),
+                          Text(
+                            memory.memory,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(fontSize: 16),
+                          ),
+                          SizedBox(height: 8),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(                              
+                                DateFormat('dd.MM.yyyy HH:mm')
+                                    .format(memory.date),
+                                style: TextStyle(
+                                  color: Colors.green,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Icon(Icons.arrow_forward_ios),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),

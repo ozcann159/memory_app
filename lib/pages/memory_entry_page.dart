@@ -97,8 +97,7 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
         child: Center(
           child: Container(
             width: MediaQuery.of(context).size.width * 12,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
+            child: Expanded(
               child: Form(
                 key: _formKey,
                 child: SingleChildScrollView(
