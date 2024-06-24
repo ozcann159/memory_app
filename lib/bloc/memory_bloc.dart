@@ -10,12 +10,15 @@ class MemoryBloc extends Bloc<MemoryEvent, MemoryState> {
   MemoryBloc(this.repository) : super(MemoryInitial()) {
     on<SubmitMemory>(_onSubmitMemory);
     on<LoadMemories>(_onLoadMemories);
+    on<ApproveMemory>(_onApproveMemory);
+    on<RejectMemory>(_onRejectMemory);
   }
 
   void _onSubmitMemory(SubmitMemory event, Emitter<MemoryState> emit) async {
     emit(MemorySubmitting());
     try {
       final memory = Memory(
+        id: event.id,
         name: event.name,
         surname: event.surname,
         state: event.state,
@@ -24,7 +27,7 @@ class MemoryBloc extends Bloc<MemoryEvent, MemoryState> {
         imageUrl: event.imageUrl,
         mosque: event.mosque,
         date: DateTime.now(),
-        
+        isApproved: event.isApproved,
       );
       await repository.addMemory(memory);
       emit(MemorySubmitted());
@@ -39,6 +42,27 @@ class MemoryBloc extends Bloc<MemoryEvent, MemoryState> {
       emit(MemoriesLoaded(memories));
     } catch (e) {
       emit(MemoryLoadError(e.toString()));
+    }
+  }
+
+  void _onApproveMemory(ApproveMemory event, Emitter<MemoryState> emit) async {
+    emit(MemorySubmitting());
+    try {
+      final approvedMemory = event.memory.copyWith(isApproved: true);
+      await repository.updateMemory(approvedMemory);
+      emit(MemorySubmitted());
+    } catch (e) {
+      emit(MemorySubmitError(e.toString()));
+    }
+  }
+
+  void _onRejectMemory(RejectMemory event, Emitter<MemoryState> emit) async {
+    emit(MemorySubmitting());
+    try {
+      await repository.deleteMemory(event.memory);
+      emit(MemorySubmitted());
+    } catch (e) {
+      emit(MemorySubmitError(e.toString()));
     }
   }
 }

@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:memory_app/models/memory_model.dart';
 
-
 abstract class MemoryState extends Equatable {
   const MemoryState();
 

@@ -12,6 +12,7 @@ import 'package:memory_app/widgets/custom_button.dart';
 import 'package:memory_app/widgets/custom_dropdown_field.dart';
 import 'package:memory_app/widgets/custom_textfield.dart';
 import 'package:path/path.dart' as path;
+import 'package:uuid/uuid.dart';
 
 class MemoryEntryPage extends StatefulWidget {
   const MemoryEntryPage({Key? key}) : super(key: key);
@@ -59,50 +60,54 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
       appBar: AppBar(
         title: const Text('Hatıra Yaz'),
       ),
-      body: BlocListener<MemoryBloc, MemoryState>(
-        listener: (context, state) {
-          if (state is MemorySubmitting) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Gönderiliyor'),
-              ),
-            );
-          } else if (state is MemorySubmitted) {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: Text("Başarılı"),
-                  content: Text("Hatıra başarıyla gönderildi"),
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        _refreshPage();
-                      },
-                      child: Text("Tamam"),
-                    )
-                  ],
-                );
-              },
-            );
-          } else if (state is MemorySubmitError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Hata: ${state.error}'),
-              ),
-            );
-          }
-        },
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/background_image.png'),
+            fit: BoxFit.cover,
+          ),
+        ),
         child: Center(
-          child: Container(
-            width: MediaQuery.of(context).size.width * 12,
-            child: Expanded(
-              child: Form(
-                key: _formKey,
-                child: SingleChildScrollView(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 15, vertical: 1),
+          child: BlocListener<MemoryBloc, MemoryState>(
+            listener: (context, state) {
+              if (state is MemorySubmitting) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Gönderiliyor'),
+                  ),
+                );
+              } else if (state is MemorySubmitted) {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text("Başarılı"),
+                      content: Text("Hatıra başarıyla gönderildi"),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                            _refreshPage();
+                          },
+                          child: Text("Tamam"),
+                        )
+                      ],
+                    );
+                  },
+                );
+              } else if (state is MemorySubmitError) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Hata: ${state.error}'),
+                  ),
+                );
+              }
+            },
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Form(
+                  key: _formKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -116,6 +121,8 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
                           borderRadius: BorderRadius.circular(14),
                         ),
                         inputHint: 'Adınızı Giriniz',
+                        fillColor: Colors.white.withOpacity(0.5), // Saydam beyaz
+                        filled: true,
                       ),
                       Text("Soyad", style: AppTextTheme.kLabelStyle),
                       CustomTextField(
@@ -127,8 +134,9 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
                           borderRadius: BorderRadius.circular(14),
                         ),
                         inputHint: 'Soyadınızı Giriniz',
+                        fillColor: Colors.white.withOpacity(0.5), // Saydam beyaz
+                        filled: true,
                       ),
-                      SizedBox(height: 5),
                       Text("Eyalet", style: AppTextTheme.kLabelStyle),
                       CustomDropdownField(
                         value: selectedState,
@@ -146,8 +154,9 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
                           }
                           return null;
                         },
+                        fillColor: Colors.white.withOpacity(0.5), // Saydam beyaz
+                        filled: true,
                       ),
-                      const SizedBox(height: 3),
                       Text("Şehir", style: AppTextTheme.kLabelStyle),
                       CustomDropdownField(
                         value: selectedCity,
@@ -167,6 +176,8 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
                           }
                           return null;
                         },
+                        fillColor: Colors.white.withOpacity(0.5), // Saydam beyaz
+                        filled: true,
                       ),
                       Text("Cami", style: AppTextTheme.kLabelStyle),
                       CustomDropdownField(
@@ -184,6 +195,8 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
                           }
                           return null;
                         },
+                        fillColor: Colors.white.withOpacity(0.5), // Saydam beyaz
+                        filled: true,
                       ),
                       Text("Hatıra", style: AppTextTheme.kLabelStyle),
                       TextFormField(
@@ -198,6 +211,8 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
                           contentPadding: const EdgeInsets.symmetric(
                               vertical: 12, horizontal: 16),
                           labelText: 'Hatıra',
+                          fillColor: Colors.white.withOpacity(0.5), // Saydam beyaz
+                          filled: true,
                         ),
                         validator: (value) {
                           if (value!.isEmpty) {
@@ -212,13 +227,14 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
                         minLines: 5,
                         maxLines: null,
                       ),
-                      if (image != null)
+                      if (image != null) ...[
                         Image.file(
                           File(image!.path),
                           height: 200,
                           width: double.infinity,
                           fit: BoxFit.cover,
                         ),
+                      ],
                       GestureDetector(
                         onTap: _pickImage,
                         child: Container(
@@ -311,14 +327,17 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
 
   void _submitMemory() {
     if (_formKey.currentState!.validate() && isChecked) {
+      String id = Uuid().v4();
       BlocProvider.of<MemoryBloc>(context).add(SubmitMemory(
+        id: id,
         name: nameController.text,
         surname: surnameController.text,
         state: selectedState!,
         city: selectedCity!,
         memory: memoryController.text,
-        imageUrl: imageUrl ?? '', // URL'yi ekle
+        imageUrl: imageUrl ?? '',
         mosque: selectedMosque!,
+        isApproved: false,
       ));
     }
   }

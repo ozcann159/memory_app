@@ -13,7 +13,7 @@ class CustomDropdownField extends StatelessWidget {
     required this.items,
     required this.labelText,
     required this.onChanged,
-    this.validator,
+    this.validator, required Color fillColor, required bool filled,
   }) : super(key: key);
 
   @override
@@ -29,6 +29,8 @@ class CustomDropdownField extends StatelessWidget {
       onChanged: onChanged,
       decoration: InputDecoration(
         labelText: labelText,
+        filled: true,
+        fillColor: Colors.white.withOpacity(0.5), // Saydam beyaz
         border: OutlineInputBorder(
           borderSide: const BorderSide(
             color: Color(0xffd1d8ff),

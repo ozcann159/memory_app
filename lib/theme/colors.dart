@@ -36,6 +36,12 @@ class AppColors {
   static const Color keventCardColor = Color(0xFFF1F3FF);
   static const Color kchatBackgroundColor = Color(0xFFF1F3FF);
 
+  static const Color primaryColor = Color(0xFF398D9D);
+  static const Color secondaryColor = Color(0xFF108669);
+  static const Color accentColor = Color(0xFF2F7481);
+
+
+
   static List<Color> colors = [
     const Color(0xff3765DD),
     const Color(0xff7464D2)

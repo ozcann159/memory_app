@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:memory_app/theme/colors.dart';
-import 'package:memory_app/theme/text_theme.dart';
-import 'package:memory_app/widgets/my_formfield.dart';
-
 
 class CustomTextField extends StatelessWidget {
   final int? maxLines, minLines;
@@ -17,10 +14,10 @@ class CustomTextField extends StatelessWidget {
   final TextEditingController? controller;
   final TextStyle? hintStyle;
   final Function(String)? onChanged;
-
+  final bool? filled; // Yeni eklendi
 
   const CustomTextField({
-    super.key,
+    Key? key,
     this.inputHint,
     this.suffixIcon,
     this.obscureText,
@@ -37,9 +34,8 @@ class CustomTextField extends StatelessWidget {
     this.focusedBorder,
     this.enabledBorder,
     this.onChanged,
-    
-
-  });
+    this.filled, required Color fillColor, // Yeni eklendi
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -48,52 +44,50 @@ class CustomTextField extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          MyFormField(
-            enabledBorder: enabledBorder ??
-                OutlineInputBorder(
-                  borderSide: const BorderSide(
-                    color: AppColors.kGreenColor,
-                  ),
-                  borderRadius: BorderRadius.circular(14),
-                ),
-            maxLines: maxLines ?? 1,
-            minLines: minLines ?? 1,
+          TextFormField(
             controller: controller,
-            validator: validator,
-            inputFilled: true,
-            inputFillColor: inputFillColor ?? AppColors.kLight,
-            inputHint: inputHint,
-            obscureText: obscureText,
-            inputKeyboardType: inputKeyBoardType,
-            contentPadding: const EdgeInsets.only(
-              top: 10,
-              left: 19,
-              right: 22,
-              bottom: 10,
-            ),
-            border: border ??
-                OutlineInputBorder(
-                  borderSide: const BorderSide(
-                    color: AppColors.kGreenColor,
+            keyboardType: inputKeyBoardType,
+            obscureText: obscureText ?? false,
+            decoration: InputDecoration(
+              hintText: inputHint,
+              suffixIcon: suffixIcon,
+              prefixIcon: prefixIcon,
+              contentPadding: const EdgeInsets.symmetric(
+                vertical: 12,
+                horizontal: 16,
+              ),
+              border: border ??
+                  OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: Color(0xffd1d8ff),
+                    ),
+                    borderRadius: BorderRadius.circular(14),
                   ),
-                  borderRadius: BorderRadius.circular(14),
-                ),
-            focusedBorder: focusedBorder ??
-                OutlineInputBorder(
-                  borderSide: const BorderSide(
-                      color: AppColors.kGreenColor, width: 1.5),
-                  borderRadius: BorderRadius.circular(14),
-                ),
-            suffixIcon: Padding(
-              padding: const EdgeInsets.only(right: 8.0),
-              child: suffixIcon,
+              focusedBorder: focusedBorder ??
+                  OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: AppColors.kGreenColor,
+                      width: 1.5,
+                    ),
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+              enabledBorder: enabledBorder ??
+                  OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: Color(0xffd1d8ff),
+                    ),
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+              filled: filled ?? false, // Yeni eklendi
+              fillColor:
+                  filled! ? Colors.white.withOpacity(0.5) : null, // Yeni eklendi
             ),
             onChanged: onChanged,
-            prefixIcon: prefixIcon,
-            inputTextStyle: AppTextTheme.kPrimaryStyle,
-            inputHintStyle: hintStyle ?? AppTextTheme.khintStyle,
+            validator: validator,
+            minLines: minLines,
+            maxLines: maxLines,
+            style: hintStyle,
           ),
-          // AppSizing.h04
         ],
       ),
     );

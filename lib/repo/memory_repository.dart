@@ -20,7 +20,16 @@ class MemoryRepository {
     await memoryCollection.add({
       ...memory.toMap(),
       'mosque': memory.mosque,
+      'isApproved': false, 
     });
+  }
+
+  Future<void> updateMemory(Memory memory) async {
+    await memoryCollection.doc(memory.id).update(memory.toMap());
+  }
+
+  Future<void> deleteMemory(Memory memory) async {
+    await memoryCollection.doc(memory.id).delete();
   }
 
   Stream<List<Memory>> getMemories() {
@@ -29,5 +38,15 @@ class MemoryRepository {
         return Memory.fromDocument(doc);
       }).toList();
     });
+  }
+
+    Stream<List<Memory>> getUnapprovedMemories() {
+    return _firestore
+        .collection('memories')
+        .where('isApproved', isEqualTo: false)
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => Memory.fromDocument(doc))
+            .toList());
   }
 }
