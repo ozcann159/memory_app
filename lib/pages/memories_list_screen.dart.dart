@@ -8,6 +8,8 @@ import 'package:memory_app/repo/memory_repository.dart';
 class MemoryListPage extends StatelessWidget {
   final MemoryRepository memoryRepository = MemoryRepository();
 
+  MemoryListPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

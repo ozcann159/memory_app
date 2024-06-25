@@ -58,10 +58,14 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Hatıra Yaz'),
+        backgroundColor: const Color(0xFF205761),
+        title: const Text(
+          'Hatıra Yaz',
+          style: AppTextTheme.kAppBarTitleStyle,
+        ),
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/images/background_image.png'),
             fit: BoxFit.cover,
@@ -72,7 +76,7 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
             listener: (context, state) {
               if (state is MemorySubmitting) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
+                  const SnackBar(
                     content: Text('Gönderiliyor'),
                   ),
                 );
@@ -81,15 +85,15 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      title: Text("Başarılı"),
-                      content: Text("Hatıra başarıyla gönderildi"),
+                      title: const Text("Başarılı"),
+                      content: const Text("Hatıra başarıyla gönderildi"),
                       actions: [
                         TextButton(
                           onPressed: () {
                             Navigator.pop(context);
                             _refreshPage();
                           },
-                          child: Text("Tamam"),
+                          child: const Text("Tamam"),
                         )
                       ],
                     );
@@ -121,7 +125,7 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
                           borderRadius: BorderRadius.circular(14),
                         ),
                         inputHint: 'Adınızı Giriniz',
-                        fillColor: Colors.white.withOpacity(0.5), // Saydam beyaz
+                        fillColor: Colors.white.withOpacity(0.5), //Saydam
                         filled: true,
                       ),
                       Text("Soyad", style: AppTextTheme.kLabelStyle),
@@ -134,14 +138,15 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
                           borderRadius: BorderRadius.circular(14),
                         ),
                         inputHint: 'Soyadınızı Giriniz',
-                        fillColor: Colors.white.withOpacity(0.5), // Saydam beyaz
+                        fillColor:
+                            Colors.white.withOpacity(0.5), // Saydam beyaz
                         filled: true,
                       ),
                       Text("Eyalet", style: AppTextTheme.kLabelStyle),
                       CustomDropdownField(
                         value: selectedState,
                         items: states,
-                        labelText: 'Eyalet',
+                        labelText: '',
                         onChanged: (value) {
                           setState(() {
                             selectedState = value;
@@ -154,7 +159,8 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
                           }
                           return null;
                         },
-                        fillColor: Colors.white.withOpacity(0.5), // Saydam beyaz
+                        fillColor:
+                            Colors.white.withOpacity(0.5), // Saydam beyaz
                         filled: true,
                       ),
                       Text("Şehir", style: AppTextTheme.kLabelStyle),
@@ -164,7 +170,7 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
                                 cities.containsKey(selectedState)
                             ? cities[selectedState]!
                             : [],
-                        labelText: 'Şehir',
+                        labelText: '',
                         onChanged: (value) {
                           setState(() {
                             selectedCity = value;
@@ -176,14 +182,14 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
                           }
                           return null;
                         },
-                        fillColor: Colors.white.withOpacity(0.5), // Saydam beyaz
+                        fillColor: Colors.white.withOpacity(0.5),
                         filled: true,
                       ),
                       Text("Cami", style: AppTextTheme.kLabelStyle),
                       CustomDropdownField(
                         value: selectedMosque,
                         items: mosques,
-                        labelText: 'Cami',
+                        labelText: '',
                         onChanged: (value) {
                           setState(() {
                             selectedMosque = value;
@@ -195,7 +201,7 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
                           }
                           return null;
                         },
-                        fillColor: Colors.white.withOpacity(0.5), // Saydam beyaz
+                        fillColor: Colors.white.withOpacity(0.5),
                         filled: true,
                       ),
                       Text("Hatıra", style: AppTextTheme.kLabelStyle),
@@ -210,8 +216,8 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
                           ),
                           contentPadding: const EdgeInsets.symmetric(
                               vertical: 12, horizontal: 16),
-                          labelText: 'Hatıra',
-                          fillColor: Colors.white.withOpacity(0.5), // Saydam beyaz
+                          labelText: '',
+                          fillColor: Colors.white.withOpacity(0.5),
                           filled: true,
                         ),
                         validator: (value) {
@@ -265,7 +271,8 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
                         ),
                       ),
                       CheckboxListTile(
-                        title: Text('Okudum ve kabul ediyorum'),
+                        title: Text('Okudum ve kabul ediyorum',
+                            style: AppTextTheme.kLabelStyle),
                         value: isChecked,
                         onChanged: (bool? value) {
                           setState(() {

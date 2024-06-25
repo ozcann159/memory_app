@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:memory_app/theme/colors.dart';
 
-
 class AppTextTheme {
   static TextStyle kAppBarStyle = GoogleFonts.inter(
     color: AppColors.kSecondaryColor,
@@ -10,8 +9,14 @@ class AppTextTheme {
     fontSize: 26,
   );
 
+  static const TextStyle kAppBarTitleStyle = TextStyle(
+    color: Colors.white,
+    fontSize: 22,
+    fontWeight: FontWeight.bold,
+  );
+
   static TextStyle kLabelStyle = GoogleFonts.inter(
-    color: AppColors.kSecondaryColor,
+    color: Color.fromARGB(255, 239, 239, 239),
     fontWeight: FontWeight.w500,
     fontSize: 16,
   );

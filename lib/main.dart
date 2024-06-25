@@ -27,12 +27,15 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+        theme: ThemeData(
+            primaryColor: Color(0xFF205761),
+            appBarTheme: AppBarTheme(color: Color(0x205761))),
         debugShowCheckedModeBanner: false,
         title: 'Hatıra Defteri',
         initialRoute: '/',
         routes: {
-          '/': (context) => MemoryListPage(),  // homepage gelecek !! 
-          
+          '/': (context) => MemoryListPage(), // homepage gelecek !!
+
           '/memories': (context) => MemoryListPage(),
           '/memory-form': (context) => MemoryEntryPage(),
           '/admin-login': (context) => AdminLoginPage(),
