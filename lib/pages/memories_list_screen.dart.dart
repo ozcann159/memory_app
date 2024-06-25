@@ -4,6 +4,7 @@ import 'package:memory_app/models/memory_model.dart';
 import 'package:memory_app/pages/memory_details_screen.dart';
 import 'package:memory_app/pages/memory_entry_page.dart';
 import 'package:memory_app/repo/memory_repository.dart';
+import 'package:memory_app/theme/text_theme.dart';
 
 class MemoryListPage extends StatelessWidget {
   final MemoryRepository memoryRepository = MemoryRepository();
@@ -12,10 +13,16 @@ class MemoryListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Color textColor = const Color(0xFF205761);
+    Color backgroundColor = const Color(0xFFD4DBC3);
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Hatıralar'),
-        backgroundColor: Colors.green[200],
+        title: const Text(
+          'Hatıralar',
+          style: AppTextTheme.kAppBarTitleStyle,
+        ),
+        backgroundColor: const Color(0xFF205761),
         actions: [
           IconButton(
             onPressed: () {
@@ -26,27 +33,34 @@ class MemoryListPage extends StatelessWidget {
                 ),
               );
             },
-            icon: const Icon(Icons.add),
+            icon: const Icon(
+              Icons.add,
+              color: Colors.white,
+            ),
           )
         ],
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage("assets/images/background_image.png"),
             fit: BoxFit.cover,
+            colorFilter: ColorFilter.mode(
+              Colors.black45,
+              BlendMode.darken,
+            ),
           ),
         ),
         child: StreamBuilder<List<Memory>>(
           stream: memoryRepository.getMemoriesOrderedByDate(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(
+              return const Center(
                 child: CircularProgressIndicator(),
               );
             }
             if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return Center(
+              return const Center(
                 child: Text('Henüz bir hatıra yok.'),
               );
             }
@@ -68,41 +82,47 @@ class MemoryListPage extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Card(
-                      margin: EdgeInsets.all(8),
+                      margin: const EdgeInsets.all(8),
                       elevation: 3,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      color: backgroundColor.withOpacity(0.7),
                       child: Padding(
-                        padding: EdgeInsets.all(16),
+                        padding: const EdgeInsets.all(16),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               memory.mosque,
                               style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.blue,
-                              ),
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: textColor,
+                                  fontFamily: 'Poppins'),
                             ),
-                            SizedBox(height: 8),
+                            const SizedBox(height: 8),
                             Text(
                               memory.memory,
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(fontSize: 16),
+                              style: const TextStyle(
+                                  fontSize: 16, fontFamily: 'OpenSans'),
                             ),
-                            SizedBox(height: 8),
+                            const SizedBox(height: 8),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
                                   DateFormat('dd.MM.yyyy HH:mm')
                                       .format(memory.date),
-                                  style: TextStyle(
-                                    color: Colors.green,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                  style: const TextStyle(
+                                      color: Color(0xFF205761),
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'Poppins',
+                                      fontSize: 16),
                                 ),
-                                Icon(Icons.arrow_forward_ios),
+                                const Icon(Icons.arrow_forward_ios),
                               ],
                             ),
                           ],

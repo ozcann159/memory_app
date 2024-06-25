@@ -1,6 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-import 'package:memory_app/theme/colors.dart';
 import 'package:memory_app/theme/text_theme.dart';
 
 class CustomButton extends StatelessWidget {
@@ -24,14 +23,14 @@ class CustomButton extends StatelessWidget {
         width: 250,
         height: 50,
         decoration: BoxDecoration(
-          color: Color(0xFF205761),
+          color: buttonColor ?? const Color(0xFFE9C522),
           borderRadius: BorderRadius.circular(14),
         ),
         child: Center(
           child: Text(
             buttonText,
-            style: AppTextTheme.kLabelStyle.copyWith(
-                color: buttonColor ?? AppColors.kLight, fontSize: size ?? 16),
+            style: AppTextTheme.kLabelStyle
+                .copyWith(color: Colors.black, fontSize: size ?? 16),
           ),
         ),
       ),

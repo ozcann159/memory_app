@@ -283,7 +283,6 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
                       ),
                       CustomButton(
                         buttonText: 'Gönder',
-                        buttonColor: Colors.white,
                         onTap: _submitMemory,
                         size: 16,
                       ),
