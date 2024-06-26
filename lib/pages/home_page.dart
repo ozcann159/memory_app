@@ -5,7 +5,15 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Hoş Geldiniz'),
+        title: Text(
+          'Hoş Geldiniz',
+          style: TextStyle(
+            fontFamily: 'Poppins', // Yeni font
+            fontSize: 20, // Yeni font boyutu
+            color: Colors.white, // Yeni metin rengi
+          ),
+        ),
+        backgroundColor: Color(0xFF205761), // Yeni app bar rengi
       ),
       body: Stack(
         children: [
@@ -29,14 +37,34 @@ class HomePage extends StatelessWidget {
                   onPressed: () {
                     Navigator.pushNamed(context, '/memory-form');
                   },
-                  child: Text('Hatıra Ekle'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFFE9C522),
+                  ),
+                  child: Text(
+                    'Hatıra Ekle',
+                    style: TextStyle(
+                      fontFamily: 'Open Sans',
+                      fontSize: 16,
+                      color: Colors.black,
+                    ),
+                  ),
                 ),
                 SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
                     Navigator.pushNamed(context, '/admin-login');
                   },
-                  child: Text('Admin Girişi'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFFE9C522),
+                  ),
+                  child: Text(
+                    'Admin Girişi',
+                    style: TextStyle(
+                      fontFamily: 'Open Sans',
+                      fontSize: 16,
+                      color: Colors.black,
+                    ),
+                  ),
                 ),
               ],
             ),

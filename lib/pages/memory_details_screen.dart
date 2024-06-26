@@ -32,10 +32,10 @@ class MemoryDetailScreen extends StatelessWidget {
             image: DecorationImage(
               image: AssetImage("assets/images/background_image.png"),
               fit: BoxFit.cover,
-              colorFilter: ColorFilter.mode(
-                Colors.black45,
-                BlendMode.darken,
-              ),
+              // colorFilter: ColorFilter.mode(
+              //   Colors.black45,
+              //   BlendMode.darken,
+              // ),
             ),
           ),
           child: SingleChildScrollView(

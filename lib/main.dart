@@ -9,6 +9,7 @@ import 'package:memory_app/pages/memory_approval_page.dart';
 import 'package:memory_app/pages/memory_entry_page.dart';
 import 'package:memory_app/repo/memory_repository.dart';
 
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(

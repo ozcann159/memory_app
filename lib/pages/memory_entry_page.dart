@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -38,7 +39,7 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
     "Hamburg": ["Hamburg City", "Altona", "Eimsbüttel"],
     "Bremen": ["Bremen City", "Bremerhaven"],
     "Berlin": ["Berlin City", "Mitte", "Friedrichshain-Kreuzberg"],
-    "Hessen": ["Frankfurt", "Wiesbaden", "Kassel"],
+    "Hessen": ["Frankfurt", "Wiesbaden", "Erlensee", "Kassel"],
   };
 
   final List<String> mosques = [
@@ -64,229 +65,235 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
           style: AppTextTheme.kAppBarTitleStyle,
         ),
       ),
-      body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/background_image.png'),
-            fit: BoxFit.cover,
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/images/background_image.png'),
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-        child: Center(
-          child: BlocListener<MemoryBloc, MemoryState>(
-            listener: (context, state) {
-              if (state is MemorySubmitting) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Gönderiliyor'),
-                  ),
-                );
-              } else if (state is MemorySubmitted) {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: const Text("Başarılı"),
-                      content: const Text("Hatıra başarıyla gönderildi"),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                            _refreshPage();
-                          },
-                          child: const Text("Tamam"),
-                        )
-                      ],
-                    );
-                  },
-                );
-              } else if (state is MemorySubmitError) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Hata: ${state.error}'),
-                  ),
-                );
-              }
-            },
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Ad", style: AppTextTheme.kLabelStyle),
-                      CustomTextField(
-                        controller: nameController,
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Color(0xffd1d8ff),
-                          ),
-                          borderRadius: BorderRadius.circular(14),
-                        ),
-                        inputHint: 'Adınızı Giriniz',
-                        fillColor: Colors.white.withOpacity(0.5), //Saydam
-                        filled: true,
-                      ),
-                      Text("Soyad", style: AppTextTheme.kLabelStyle),
-                      CustomTextField(
-                        controller: surnameController,
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Color(0xffd1d8ff),
-                          ),
-                          borderRadius: BorderRadius.circular(14),
-                        ),
-                        inputHint: 'Soyadınızı Giriniz',
-                        fillColor:
-                            Colors.white.withOpacity(0.5), // Saydam beyaz
-                        filled: true,
-                      ),
-                      Text("Eyalet", style: AppTextTheme.kLabelStyle),
-                      CustomDropdownField(
-                        value: selectedState,
-                        items: states,
-                        labelText: '',
-                        onChanged: (value) {
-                          setState(() {
-                            selectedState = value;
-                            selectedCity = null;
-                          });
-                        },
-                        validator: (value) {
-                          if (value == null) {
-                            return 'Lütfen bir eyalet seçin';
-                          }
-                          return null;
-                        },
-                        fillColor:
-                            Colors.white.withOpacity(0.5), // Saydam beyaz
-                        filled: true,
-                      ),
-                      Text("Şehir", style: AppTextTheme.kLabelStyle),
-                      CustomDropdownField(
-                        value: selectedCity,
-                        items: selectedState != null &&
-                                cities.containsKey(selectedState)
-                            ? cities[selectedState]!
-                            : [],
-                        labelText: '',
-                        onChanged: (value) {
-                          setState(() {
-                            selectedCity = value;
-                          });
-                        },
-                        validator: (value) {
-                          if (value == null) {
-                            return 'Lütfen bir şehir seçin';
-                          }
-                          return null;
-                        },
-                        fillColor: Colors.white.withOpacity(0.5),
-                        filled: true,
-                      ),
-                      Text("Cami", style: AppTextTheme.kLabelStyle),
-                      CustomDropdownField(
-                        value: selectedMosque,
-                        items: mosques,
-                        labelText: '',
-                        onChanged: (value) {
-                          setState(() {
-                            selectedMosque = value;
-                          });
-                        },
-                        validator: (value) {
-                          if (value == null) {
-                            return 'Lütfen bir cami seçin';
-                          }
-                          return null;
-                        },
-                        fillColor: Colors.white.withOpacity(0.5),
-                        filled: true,
-                      ),
-                      Text("Hatıra", style: AppTextTheme.kLabelStyle),
-                      TextFormField(
-                        controller: memoryController,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
+          child: Center(
+            child: BlocListener<MemoryBloc, MemoryState>(
+              listener: (context, state) {
+                if (state is MemorySubmitting) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Gönderiliyor'),
+                    ),
+                  );
+                } else if (state is MemorySubmitted) {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text("Başarılı"),
+                        content: const Text("Hatıra başarıyla gönderildi"),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                              _refreshPage();
+                            },
+                            child: const Text("Tamam"),
+                          )
+                        ],
+                      );
+                    },
+                  );
+                } else if (state is MemorySubmitError) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Hata: ${state.error}'),
+                    ),
+                  );
+                }
+              },
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Ad", style: AppTextTheme.kLabelStyle),
+                        CustomTextField(
+                          controller: nameController,
+                          enabledBorder: OutlineInputBorder(
                             borderSide: const BorderSide(
                               color: Color(0xffd1d8ff),
                             ),
                             borderRadius: BorderRadius.circular(14),
                           ),
-                          contentPadding: const EdgeInsets.symmetric(
-                              vertical: 12, horizontal: 16),
-                          labelText: '',
+                          inputHint: 'Adınızı Giriniz',
                           fillColor: Colors.white.withOpacity(0.5),
                           filled: true,
                         ),
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'Lütfen hatıranızı yazın';
-                          }
-                          if (value.length > 1000) {
-                            return 'Hatıra 1000 karakterden fazla olamaz';
-                          }
-                          return null;
-                        },
-                        maxLength: 1000,
-                        minLines: 5,
-                        maxLines: null,
-                      ),
-                      if (image != null) ...[
-                        Image.file(
-                          File(image!.path),
-                          height: 200,
-                          width: double.infinity,
-                          fit: BoxFit.cover,
-                        ),
-                      ],
-                      GestureDetector(
-                        onTap: _pickImage,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 20),
-                          decoration: BoxDecoration(
-                            color: Colors.blue,
-                            borderRadius: BorderRadius.circular(8),
+                        Text("Soyad", style: AppTextTheme.kLabelStyle),
+                        CustomTextField(
+                          controller: surnameController,
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Color(0xffd1d8ff),
+                            ),
+                            borderRadius: BorderRadius.circular(14),
                           ),
-                          child: const Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(
-                                Icons.add_a_photo,
-                                color: Colors.white,
+                          inputHint: 'Soyadınızı Giriniz',
+                          fillColor: Colors.white.withOpacity(0.5),
+                          filled: true,
+                        ),
+                        Text("Eyalet", style: AppTextTheme.kLabelStyle),
+                        CustomDropdownField(
+                          value: selectedState,
+                          items: states,
+                          labelText: '',
+                          onChanged: (value) {
+                            setState(() {
+                              selectedState = value;
+                              selectedCity = null;
+                            });
+                          },
+                          validator: (value) {
+                            if (value == null) {
+                              return 'Lütfen bir eyalet seçin';
+                            }
+                            return null;
+                          },
+                          fillColor: Colors.white.withOpacity(0.5),
+                          filled: true,
+                        ),
+                        Text("Şehir", style: AppTextTheme.kLabelStyle),
+                        CustomDropdownField(
+                          value: selectedCity,
+                          items: selectedState != null &&
+                                  cities.containsKey(selectedState)
+                              ? cities[selectedState]!
+                              : [],
+                          labelText: '',
+                          onChanged: (value) {
+                            setState(() {
+                              selectedCity = value;
+                            });
+                          },
+                          validator: (value) {
+                            if (value == null) {
+                              return 'Lütfen bir şehir seçin';
+                            }
+                            return null;
+                          },
+                          fillColor: Colors.white.withOpacity(0.5),
+                          filled: true,
+                        ),
+                        Text("Cami", style: AppTextTheme.kLabelStyle),
+                        CustomDropdownField(
+                          value: selectedMosque,
+                          items: mosques,
+                          labelText: '',
+                          onChanged: (value) {
+                            setState(() {
+                              selectedMosque = value;
+                            });
+                          },
+                          validator: (value) {
+                            if (value == null) {
+                              return 'Lütfen bir cami seçin';
+                            }
+                            return null;
+                          },
+                          fillColor: Colors.white.withOpacity(0.5),
+                          filled: true,
+                        ),
+                        Text("Hatıra", style: AppTextTheme.kLabelStyle),
+                        TextFormField(
+                          controller: memoryController,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                color: Color(0xffd1d8ff),
                               ),
-                              SizedBox(width: 5),
-                              Text(
-                                'Resim Ekle',
-                                style: TextStyle(
+                              borderRadius: BorderRadius.circular(14),
+                            ),
+                            contentPadding: const EdgeInsets.symmetric(
+                                vertical: 12, horizontal: 16),
+                            labelText: '',
+                            fillColor: Colors.white.withOpacity(0.5),
+                            filled: true,
+                          ),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Lütfen hatıranızı yazın';
+                            }
+                            if (value.length > 1000) {
+                              return 'Hatıra 1000 karakterden fazla olamaz';
+                            }
+                            return null;
+                          },
+                          maxLength: 1000,
+                          minLines: 5,
+                          maxLines: null,
+                        ),
+                        if (image != null) ...[
+                          Image.file(
+                            File(image!.path),
+                            height: 200,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                          ),
+                        ],
+                        GestureDetector(
+                          onTap: () => _pickImage(ImageSource.camera),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 20),
+                            decoration: BoxDecoration(
+                              color: Colors.blue,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: const Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.add_a_photo,
                                   color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
                                 ),
-                              ),
-                            ],
+                                SizedBox(width: 5),
+                                Text(
+                                  'Resim Ekle',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      CheckboxListTile(
-                        title: Text('Okudum ve kabul ediyorum',
-                            style: AppTextTheme.kLabelStyle),
-                        value: isChecked,
-                        onChanged: (bool? value) {
-                          setState(() {
-                            isChecked = value ?? false;
-                          });
-                        },
-                        controlAffinity: ListTileControlAffinity.leading,
-                      ),
-                      CustomButton(
-                        buttonText: 'Gönder',
-                        onTap: _submitMemory,
-                        size: 16,
-                      ),
-                    ],
+                        SizedBox(height: 10),
+                        CheckboxListTile(
+                          title: Text('Okudum ve kabul ediyorum',
+                              style: AppTextTheme.kLabelStyle),
+                          value: isChecked,
+                          onChanged: (bool? value) {
+                            setState(() {
+                              isChecked = value ?? false;
+                            });
+                          },
+                          controlAffinity: ListTileControlAffinity.leading,
+                        ),
+                        SizedBox(height: 10),
+                        CustomButton(
+                          buttonText: 'Gönder',
+                          onTap: _submitMemory,
+                          size: 16,
+                        ),
+                        SizedBox(height: 20),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -297,9 +304,9 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
     );
   }
 
-  Future<void> _pickImage() async {
+  Future<void> _pickImage(ImageSource source) async {
     final pickedImage =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
+        await ImagePicker().pickImage(source: source);
     if (pickedImage != null) {
       setState(() {
         image = pickedImage;

@@ -37,7 +37,16 @@ class MemoryListPage extends StatelessWidget {
               Icons.add,
               color: Colors.white,
             ),
-          )
+          ),
+          IconButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/admin-login');
+            },
+            icon: Icon(
+              Icons.admin_panel_settings,
+              color: Colors.white,
+            ),
+          ),
         ],
       ),
       body: Container(
