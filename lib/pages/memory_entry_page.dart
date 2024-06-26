@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -39,16 +38,26 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
     "Hamburg": ["Hamburg City", "Altona", "Eimsbüttel"],
     "Bremen": ["Bremen City", "Bremerhaven"],
     "Berlin": ["Berlin City", "Mitte", "Friedrichshain-Kreuzberg"],
-    "Hessen": ["Frankfurt", "Wiesbaden", "Erlensee", "Kassel"],
+    "Hessen": [
+      "Frankfurt",
+      "Wiesbaden",
+      "Erlensee",
+      "Kassel",
+      "Gelnhausen",
+      "Wächtersbach"
+    ],
   };
 
   final List<String> mosques = [
+    "DITIB-Türkisch Islamische Gemeinde Gelnhausen eV",
     "Cologne Central Mosque",
     "Berlin Sehitlik Mosque",
     "Essen DITIB Merkez Camii",
     "Duisburg Merkez Moschee",
-    "Frankfurt Nida Moschee",
-    "Hamburg Merkez Camii",
+    "Frankfurt Zentralmoschee Wächtersbach",
+    "Ditib Türkisch-Islamische Gemeinde zu Schlüchtern e.v. Eyüp Sultan Moschee",
+    "DITIB Türkisch Islamischer Gemeinde zu Erlensee eV Fatih-Moschee Erlensee,"
+        "Hamburg Merkez Camii",
     "Mannheim DITIB Yunus Emre Camii",
     "Stuttgart Zentral Moschee",
     "Nuremberg Süleymaniye Moschee",
@@ -91,7 +100,8 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
                     builder: (BuildContext context) {
                       return AlertDialog(
                         title: const Text("Başarılı"),
-                        content: const Text("Hatıra başarıyla gönderildi"),
+                        content: const Text(
+                            "Hatıranız başarıyla gönderildi ve admin tarafından onaylandıktan sonra yayımlanacaktır."),
                         actions: [
                           TextButton(
                             onPressed: () {
@@ -305,8 +315,7 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
   }
 
   Future<void> _pickImage(ImageSource source) async {
-    final pickedImage =
-        await ImagePicker().pickImage(source: source);
+    final pickedImage = await ImagePicker().pickImage(source: source);
     if (pickedImage != null) {
       setState(() {
         image = pickedImage;

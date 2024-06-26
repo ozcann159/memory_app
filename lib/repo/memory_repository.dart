@@ -9,6 +9,7 @@ class MemoryRepository {
   Stream<List<Memory>> getMemoriesOrderedByDate() {
     return _firestore
         .collection('memories')
+        .where('isApproved', isEqualTo: true) // Sadece onaylanmış hatıraları getir
         .orderBy('date', descending: true)
         .snapshots()
         .map((snapshot) => snapshot.docs
@@ -20,7 +21,13 @@ class MemoryRepository {
     await memoryCollection.add({
       ...memory.toMap(),
       'mosque': memory.mosque,
-      'isApproved': false, 
+      'isApproved': false,
+    });
+  }
+
+  Future<void> approveMemory(String memoryId) async {
+    await memoryCollection.doc(memoryId).update({
+      'isApproved': true,
     });
   }
 
@@ -40,7 +47,7 @@ class MemoryRepository {
     });
   }
 
-    Stream<List<Memory>> getUnapprovedMemories() {
+  Stream<List<Memory>> getUnapprovedMemories() {
     return _firestore
         .collection('memories')
         .where('isApproved', isEqualTo: false)

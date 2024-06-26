@@ -107,10 +107,13 @@ class MemoryApprovalPage extends StatelessWidget {
   }
 }
 
+
+
 class MemoryApprovalDetailScreen extends StatelessWidget {
   final Memory memory;
+  final MemoryRepository memoryRepository = MemoryRepository();
 
-  const MemoryApprovalDetailScreen({Key? key, required this.memory})
+   MemoryApprovalDetailScreen({Key? key, required this.memory})
       : super(key: key);
 
   @override
@@ -136,7 +139,7 @@ class MemoryApprovalDetailScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                memory.name + ' ' + memory.surname,
+                '${memory.name} ${memory.surname}',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -154,21 +157,37 @@ class MemoryApprovalDetailScreen extends StatelessWidget {
                 children: [
                   CustomButton(
                     buttonText: 'Onayla',
-                    onTap: () {
-                      // Onayla işlemi
+                    onTap: () async {
+                      await memoryRepository.approveMemory(memory.id);
+                      Navigator.pop(context); // Geri dön
                     },
                     size: 16,
                   ),
                   ElevatedButton(
-                    onPressed: () {
-                      // Reddet işlemi
+                    onPressed: () async {
+                      // Reddet işlemi burada
+                      // Hatıra sahibine bildirim gönderme işlemi de burada yapılabilir
+                      await showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: Text('Hatıra Reddedildi'),
+                          content: Text('Hatıra yazma koşullarına uymadığınız için hatıranız reddedilmiştir.'),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text('Tamam'),
+                            ),
+                          ],
+                        ),
+                      );
+                      Navigator.pop(context); // Geri dön
                     },
-                    child:
-                        Text('Reddet', style: TextStyle(color: Colors.white)),
+                    child: Text('Reddet', style: TextStyle(color: Colors.white)),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                      padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                     ),
                   ),
                 ],

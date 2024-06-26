@@ -105,10 +105,11 @@ class MemoryListPage extends StatelessWidget {
                             Text(
                               memory.mosque,
                               style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: textColor,
-                                  fontFamily: 'Poppins'),
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: textColor,
+                                fontFamily: 'Poppins',
+                              ),
                             ),
                             const SizedBox(height: 8),
                             Text(
@@ -116,7 +117,9 @@ class MemoryListPage extends StatelessWidget {
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
-                                  fontSize: 16, fontFamily: 'OpenSans'),
+                                fontSize: 16,
+                                fontFamily: 'OpenSans',
+                              ),
                             ),
                             const SizedBox(height: 8),
                             Row(
@@ -126,10 +129,11 @@ class MemoryListPage extends StatelessWidget {
                                   DateFormat('dd.MM.yyyy HH:mm')
                                       .format(memory.date),
                                   style: const TextStyle(
-                                      color: Color(0xFF205761),
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: 'Poppins',
-                                      fontSize: 16),
+                                    color: Color(0xFF205761),
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'Poppins',
+                                    fontSize: 16,
+                                  ),
                                 ),
                                 const Icon(Icons.arrow_forward_ios),
                               ],

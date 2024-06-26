@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Memory {
-  String id; // Eklenen alan
+  String id; 
   String name;
   String surname;
   String state;
@@ -13,7 +13,7 @@ class Memory {
   bool isApproved;
 
   Memory({
-    required this.id, // Güncellendi
+    required this.id, 
     required this.name,
     required this.surname,
     required this.state,
