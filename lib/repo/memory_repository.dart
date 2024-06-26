@@ -22,6 +22,7 @@ class MemoryRepository {
       ...memory.toMap(),
       'mosque': memory.mosque,
       'isApproved': false,
+      'email': memory.email,
     });
   }
 

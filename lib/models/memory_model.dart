@@ -11,6 +11,7 @@ class Memory {
   String mosque;
   DateTime date;
   bool isApproved;
+  String? email;
 
   Memory({
     required this.id, 
@@ -23,6 +24,7 @@ class Memory {
     required this.mosque,
     required this.date,
     this.isApproved = false,
+    this.email,
   });
 
   factory Memory.fromDocument(DocumentSnapshot doc) {
@@ -52,6 +54,7 @@ class Memory {
       'mosque': mosque,
       'date': date,
       'isApproved': isApproved,
+      'email':email,
     };
   }
 

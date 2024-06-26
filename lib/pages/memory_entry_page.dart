@@ -260,7 +260,7 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
                             padding: const EdgeInsets.symmetric(
                                 vertical: 10, horizontal: 20),
                             decoration: BoxDecoration(
-                              color: Colors.blue,
+                              color: const Color(0xFF205761),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: const Row(
@@ -283,19 +283,19 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 10),
-                        CheckboxListTile(
-                          title: Text('Okudum ve kabul ediyorum',
-                              style: AppTextTheme.kLabelStyle),
-                          value: isChecked,
-                          onChanged: (bool? value) {
-                            setState(() {
-                              isChecked = value ?? false;
-                            });
-                          },
-                          controlAffinity: ListTileControlAffinity.leading,
-                        ),
-                        SizedBox(height: 10),
+                        SizedBox(height: 5),
+                        // CheckboxListTile(
+                        //   title: Text('Okudum ve kabul ediyorum',
+                        //       style: AppTextTheme.kLabelStyle),
+                        //   value: isChecked,
+                        //   onChanged: (bool? value) {
+                        //     setState(() {
+                        //       isChecked = value ?? false;
+                        //     });
+                        //   },
+                        //   controlAffinity: ListTileControlAffinity.leading,
+                        // ),
+                        SizedBox(height: 5),
                         CustomButton(
                           buttonText: 'Gönder',
                           onTap: _submitMemory,

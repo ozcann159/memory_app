@@ -1,4 +1,6 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:equatable/equatable.dart';
+
 import 'package:memory_app/models/memory_model.dart';
 
 abstract class MemoryEvent extends Equatable {
@@ -18,6 +20,7 @@ class SubmitMemory extends MemoryEvent {
   final String imageUrl;
   final String mosque;
   final bool isApproved;
+  final String? email;
 
   const SubmitMemory({
     required this.id,
@@ -29,10 +32,12 @@ class SubmitMemory extends MemoryEvent {
     required this.imageUrl,
     required this.mosque,
     required this.isApproved,
+    this.email,
   });
 
-  @override
-  List<Object> get props => [id,name, surname, state, city, memory, imageUrl, mosque, isApproved];
+ @override
+List<Object> get props => [id, name, surname, state, city, memory, imageUrl, mosque, isApproved, ];
+
 }
 
 class LoadMemories extends MemoryEvent {}

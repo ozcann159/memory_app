@@ -28,6 +28,7 @@ class MemoryBloc extends Bloc<MemoryEvent, MemoryState> {
         mosque: event.mosque,
         date: DateTime.now(),
         isApproved: event.isApproved,
+        email: event.email,
       );
       await repository.addMemory(memory);
       emit(MemorySubmitted());
