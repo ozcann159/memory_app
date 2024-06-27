@@ -17,7 +17,7 @@ class SubmitMemory extends MemoryEvent {
   final String state;
   final String city;
   final String memory;
-  final String imageUrl;
+  final List<String> imageUrls;
   final String mosque;
   final bool isApproved;
   final String? email;
@@ -29,14 +29,14 @@ class SubmitMemory extends MemoryEvent {
     required this.state,
     required this.city,
     required this.memory,
-    required this.imageUrl,
+    required this.imageUrls, 
     required this.mosque,
     required this.isApproved,
     this.email,
   });
 
  @override
-List<Object> get props => [id, name, surname, state, city, memory, imageUrl, mosque, isApproved, ];
+List<Object> get props => [id, name, surname, state, city, memory, imageUrls, mosque, isApproved, ];
 
 }
 

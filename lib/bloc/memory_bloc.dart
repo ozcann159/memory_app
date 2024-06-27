@@ -24,7 +24,7 @@ class MemoryBloc extends Bloc<MemoryEvent, MemoryState> {
         state: event.state,
         city: event.city,
         memory: event.memory,
-        imageUrl: event.imageUrl,
+        imageUrls: event.imageUrls,
         mosque: event.mosque,
         date: DateTime.now(),
         isApproved: event.isApproved,

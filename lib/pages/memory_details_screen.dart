@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:memory_app/theme/text_theme.dart';
 
@@ -32,10 +33,6 @@ class MemoryDetailScreen extends StatelessWidget {
             image: DecorationImage(
               image: AssetImage("assets/images/background_image.png"),
               fit: BoxFit.cover,
-              // colorFilter: ColorFilter.mode(
-              //   Colors.black45,
-              //   BlendMode.darken,
-              // ),
             ),
           ),
           child: SingleChildScrollView(
@@ -45,22 +42,10 @@ class MemoryDetailScreen extends StatelessWidget {
               children: [
                 const SizedBox(height: 20),
                 Center(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.grey[200],
-                    ),
+                  child: SizedBox(
                     width: MediaQuery.of(context).size.width * 0.8,
                     height: 200,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: memoryData.containsKey('imageUrl')
-                          ? Image.network(
-                              memoryData['imageUrl'],
-                              fit: BoxFit.cover,
-                            )
-                          : const Icon(Icons.image_not_supported, size: 50),
-                    ),
+                    child: _buildImageSlider(),
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -76,28 +61,28 @@ class MemoryDetailScreen extends StatelessWidget {
                 _buildDetailText(
                   'Eyalet:',
                   memoryData['state'] ?? 'Bilinmiyor',
-                  textColor, // Sarı renk
+                  textColor,
                   backgroundColor,
                 ),
                 const SizedBox(height: 10.0),
                 _buildDetailText(
                   'Şehir:',
                   memoryData['city'] ?? 'Bilinmiyor',
-                  textColor, // Sarı renk
+                  textColor,
                   backgroundColor,
                 ),
                 const SizedBox(height: 10.0),
                 _buildDetailText(
                   'Cami:',
                   memoryData['mosque'] ?? 'Bilinmiyor',
-                  textColor, // Sarı renk
+                  textColor,
                   backgroundColor,
                 ),
                 const SizedBox(height: 10.0),
                 _buildDetailText(
                   'Hatıra:',
                   memoryData['memory'] ?? 'Bilinmiyor',
-                  textColor, // Sarı renk
+                  textColor,
                   backgroundColor,
                 ),
               ],
@@ -107,6 +92,47 @@ class MemoryDetailScreen extends StatelessWidget {
       ),
     );
   }
+
+  Widget _buildImageSlider() {
+  List<String> imageUrls = memoryData['imageUrls'] ?? [];
+  if (imageUrls.isEmpty) {
+    return const Icon(Icons.image_not_supported, size: 50);
+  } else {
+    return CarouselSlider(
+      options: CarouselOptions(
+        height: 200,
+        aspectRatio: 16 / 9,
+        viewportFraction: 0.8,
+        initialPage: 0,
+        enableInfiniteScroll: true,
+        autoPlay: true,
+        autoPlayInterval: Duration(seconds: 3),
+        autoPlayAnimationDuration: Duration(milliseconds: 800),
+        autoPlayCurve: Curves.fastOutSlowIn,
+        enlargeCenterPage: true,
+        scrollDirection: Axis.horizontal,
+      ),
+      items: imageUrls.map((imageUrl) {
+        return Builder(
+          builder: (BuildContext context) {
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image.network(
+                  imageUrl,
+                  width: 150,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            );
+          },
+        );
+      }).toList(),
+    );
+  }
+}
+
 
   Widget _buildDetailText(
       String label, String value, Color color, Color backgroundColor) {

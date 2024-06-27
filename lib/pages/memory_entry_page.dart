@@ -33,7 +33,8 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
   String? selectedCity;
   String? selectedMosque;
   XFile? image;
-  String? imageUrl;
+   List<String> imageUrls = [];
+   String? imageUrl;
 
   final List<String> states = ["Hamburg", "Bremen", "Berlin", "Hessen"];
   final Map<String, List<String>> cities = {
@@ -370,22 +371,27 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
   }
 
   void _submitMemory() {
-    if (_formKey.currentState!.validate() && isChecked) {
-      String id = Uuid().v4();
-      BlocProvider.of<MemoryBloc>(context).add(SubmitMemory(
-        id: id,
-        name: nameController.text,
-        surname: surnameController.text,
-        email: emailController.text,
-        state: selectedState!,
-        city: selectedCity!,
-        memory: memoryController.text,
-        imageUrl: imageUrl ?? '',
-        mosque: selectedMosque!,
-        isApproved: false,
-      ));
-    }
+  if (_formKey.currentState!.validate() && isChecked) {
+    String id = Uuid().v4();
+    
+    // Ensure imageUrls is properly handled, initialize if necessary
+    List<String> selectedImageUrls = imageUrls.isNotEmpty ? List.from(imageUrls) : [];
+
+    BlocProvider.of<MemoryBloc>(context).add(SubmitMemory(
+      id: id,
+      name: nameController.text,
+      surname: surnameController.text,
+      email: emailController.text,
+      state: selectedState!,
+      city: selectedCity!,
+      memory: memoryController.text,
+      imageUrls: selectedImageUrls, 
+      mosque: selectedMosque!,
+      isApproved: false,
+    ));
   }
+}
+
 
   void _refreshPage() {
     setState(() {

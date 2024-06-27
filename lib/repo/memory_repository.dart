@@ -23,6 +23,7 @@ class MemoryRepository {
       'mosque': memory.mosque,
       'isApproved': false,
       'email': memory.email,
+      'imageUrls': memory.imageUrls,
     });
   }
 
