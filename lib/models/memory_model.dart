@@ -30,7 +30,7 @@ class Memory {
   factory Memory.fromDocument(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
     return Memory(
-      id: doc.id, // Güncellendi
+      id: doc.id, 
       name: data['name'],
       surname: data['surname'],
       state: data['state'],
@@ -40,6 +40,7 @@ class Memory {
       mosque: data['mosque'],
       date: (data['date'] as Timestamp).toDate(),
       isApproved: data['isApproved'] ?? false,
+      email:  data['email'],
     );
   }
 

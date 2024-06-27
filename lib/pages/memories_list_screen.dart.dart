@@ -70,7 +70,7 @@ class MemoryListPage extends StatelessWidget {
             }
             if (!snapshot.hasData || snapshot.data!.isEmpty) {
               return const Center(
-                child: Text('Henüz bir hatıra yok.'),
+                child: Text('Henüz onaylanmış bir hatıra yok.'),
               );
             }
             return ListView.builder(

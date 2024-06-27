@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:memory_app/bloc/memory_bloc.dart';
 import 'package:memory_app/bloc/memory_event.dart';
 import 'package:memory_app/bloc/memory_state.dart';
+import 'package:memory_app/pages/memories_list_screen.dart.dart';
 import 'package:memory_app/theme/text_theme.dart';
 import 'package:memory_app/widgets/custom_button.dart';
 import 'package:memory_app/widgets/custom_dropdown_field.dart';
@@ -26,6 +27,7 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
   TextEditingController nameController = TextEditingController();
   TextEditingController surnameController = TextEditingController();
   TextEditingController memoryController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
   bool isChecked = false;
   String? selectedState;
   String? selectedCity;
@@ -44,7 +46,8 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
       "Erlensee",
       "Kassel",
       "Gelnhausen",
-      "Wächtersbach"
+      "Wächtersbach",
+      "Schlüchtern"
     ],
   };
 
@@ -106,7 +109,12 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
                           TextButton(
                             onPressed: () {
                               Navigator.pop(context);
-                              _refreshPage();
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => MemoryListPage(),
+                                ),
+                              );
                             },
                             child: const Text("Tamam"),
                           )
@@ -156,6 +164,20 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
                           fillColor: Colors.white.withOpacity(0.5),
                           filled: true,
                         ),
+                        Text("E-posta", style: AppTextTheme.kLabelStyle),
+                        CustomTextField(
+                          controller: emailController,
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Color(0xffd1d8ff),
+                            ),
+                            borderRadius: BorderRadius.circular(14),
+                          ),
+                          inputHint: 'E-posta adresinizi giriniz',
+                          fillColor: Colors.white.withOpacity(0.5),
+                          filled: true,
+                        ),
+                        SizedBox(height: 5),
                         Text("Eyalet", style: AppTextTheme.kLabelStyle),
                         CustomDropdownField(
                           value: selectedState,
@@ -284,17 +306,17 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
                           ),
                         ),
                         SizedBox(height: 5),
-                        // CheckboxListTile(
-                        //   title: Text('Okudum ve kabul ediyorum',
-                        //       style: AppTextTheme.kLabelStyle),
-                        //   value: isChecked,
-                        //   onChanged: (bool? value) {
-                        //     setState(() {
-                        //       isChecked = value ?? false;
-                        //     });
-                        //   },
-                        //   controlAffinity: ListTileControlAffinity.leading,
-                        // ),
+                        CheckboxListTile(
+                          title: Text('Okudum ve kabul ediyorum',
+                              style: AppTextTheme.kLabelStyle),
+                          value: isChecked,
+                          onChanged: (bool? value) {
+                            setState(() {
+                              isChecked = value ?? false;
+                            });
+                          },
+                          controlAffinity: ListTileControlAffinity.leading,
+                        ),
                         SizedBox(height: 5),
                         CustomButton(
                           buttonText: 'Gönder',
@@ -354,6 +376,7 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
         id: id,
         name: nameController.text,
         surname: surnameController.text,
+        email: emailController.text,
         state: selectedState!,
         city: selectedCity!,
         memory: memoryController.text,

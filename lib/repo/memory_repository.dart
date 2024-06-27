@@ -9,7 +9,7 @@ class MemoryRepository {
   Stream<List<Memory>> getMemoriesOrderedByDate() {
     return _firestore
         .collection('memories')
-        .where('isApproved', isEqualTo: true) // Sadece onaylanmış hatıraları getir
+        .where('isApproved', isEqualTo: true) 
         .orderBy('date', descending: true)
         .snapshots()
         .map((snapshot) => snapshot.docs
