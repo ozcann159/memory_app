@@ -347,7 +347,7 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
       String? url = await _uploadImageToFirebase();
       if (url != null) {
         setState(() {
-          imageUrl = url;
+          imageUrls.add(url);
         });
       }
     }
@@ -373,8 +373,6 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
   void _submitMemory() {
   if (_formKey.currentState!.validate() && isChecked) {
     String id = Uuid().v4();
-    
-    // Ensure imageUrls is properly handled, initialize if necessary
     List<String> selectedImageUrls = imageUrls.isNotEmpty ? List.from(imageUrls) : [];
 
     BlocProvider.of<MemoryBloc>(context).add(SubmitMemory(
