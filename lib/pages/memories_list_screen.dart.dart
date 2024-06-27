@@ -15,7 +15,6 @@ class MemoryListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     Color textColor = const Color(0xFF205761);
     Color backgroundColor = const Color(0xFFD4DBC3);
-
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -42,7 +41,7 @@ class MemoryListPage extends StatelessWidget {
             onPressed: () {
               Navigator.pushNamed(context, '/admin-login');
             },
-            icon: Icon(
+            icon: const Icon(
               Icons.admin_panel_settings,
               color: Colors.white,
             ),
@@ -102,6 +101,15 @@ class MemoryListPage extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            Text(
+                              '${memory.name} ${memory.surname}',
+                              style: TextStyle(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  fontFamily: 'Poppins'),
+                            ),
+                            SizedBox(height: 8),
                             Text(
                               memory.mosque,
                               style: TextStyle(
