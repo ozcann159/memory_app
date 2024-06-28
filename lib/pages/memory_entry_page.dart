@@ -33,8 +33,8 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
   String? selectedCity;
   String? selectedMosque;
   XFile? image;
-   List<String> imageUrls = [];
-   String? imageUrl;
+  List<String> imageUrls = [];
+  String? imageUrl;
 
   final List<String> states = ["Hamburg", "Bremen", "Berlin", "Hessen"];
   final Map<String, List<String>> cities = {
@@ -76,6 +76,14 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
         title: const Text(
           'Hatıra Yaz',
           style: AppTextTheme.kAppBarTitleStyle,
+        ),
+        iconTheme: const IconThemeData(color: Colors.white),
+        leading: IconButton(
+          onPressed: () => Navigator.of(context).pop(),
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
         ),
       ),
       body: GestureDetector(
@@ -269,14 +277,37 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
                           minLines: 5,
                           maxLines: null,
                         ),
-                        if (image != null) ...[
-                          Image.file(
-                            File(image!.path),
-                            height: 200,
-                            width: double.infinity,
-                            fit: BoxFit.cover,
+                        if (imageUrls.isNotEmpty)
+                          SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              children: imageUrls
+                                  .map((url) => Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: Colors.grey,
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                          ),
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                            child: Image.network(
+                                              url,
+                                              height: 200,
+                                              width: 200,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                        ),
+                                      ))
+                                  .toList(),
+                            ),
                           ),
-                        ],
                         GestureDetector(
                           onTap: () => _pickImage(ImageSource.camera),
                           child: Container(
@@ -371,25 +402,25 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
   }
 
   void _submitMemory() {
-  if (_formKey.currentState!.validate() && isChecked) {
-    String id = Uuid().v4();
-    List<String> selectedImageUrls = imageUrls.isNotEmpty ? List.from(imageUrls) : [];
+    if (_formKey.currentState!.validate() && isChecked) {
+      String id = Uuid().v4();
+      List<String> selectedImageUrls =
+          imageUrls.isNotEmpty ? List.from(imageUrls) : [];
 
-    BlocProvider.of<MemoryBloc>(context).add(SubmitMemory(
-      id: id,
-      name: nameController.text,
-      surname: surnameController.text,
-      email: emailController.text,
-      state: selectedState!,
-      city: selectedCity!,
-      memory: memoryController.text,
-      imageUrls: selectedImageUrls, 
-      mosque: selectedMosque!,
-      isApproved: false,
-    ));
+      BlocProvider.of<MemoryBloc>(context).add(SubmitMemory(
+        id: id,
+        name: nameController.text,
+        surname: surnameController.text,
+        email: emailController.text,
+        state: selectedState!,
+        city: selectedCity!,
+        memory: memoryController.text,
+        imageUrls: selectedImageUrls,
+        mosque: selectedMosque!,
+        isApproved: false,
+      ));
+    }
   }
-}
-
 
   void _refreshPage() {
     setState(() {
