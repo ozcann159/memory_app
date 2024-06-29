@@ -34,7 +34,8 @@ class CustomTextField extends StatelessWidget {
     this.focusedBorder,
     this.enabledBorder,
     this.onChanged,
-    this.filled, required Color fillColor, // Yeni eklendi
+    this.filled,
+    required Color fillColor, 
   }) : super(key: key);
 
   @override
@@ -59,7 +60,7 @@ class CustomTextField extends StatelessWidget {
               border: border ??
                   OutlineInputBorder(
                     borderSide: const BorderSide(
-                      color: Color(0xffd1d8ff),
+                      color: Color(0xFF205761),
                     ),
                     borderRadius: BorderRadius.circular(14),
                   ),
@@ -78,9 +79,10 @@ class CustomTextField extends StatelessWidget {
                     ),
                     borderRadius: BorderRadius.circular(14),
                   ),
-              filled: filled ?? false, // Yeni eklendi
-              fillColor:
-                  filled! ? Colors.white.withOpacity(0.5) : null, // Yeni eklendi
+              filled: filled ?? false, 
+              fillColor: filled!
+                  ? Colors.white.withOpacity(0.5)
+                  : null, // Yeni eklendi
             ),
             onChanged: onChanged,
             validator: validator,

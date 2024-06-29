@@ -91,10 +91,14 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
           FocusScope.of(context).unfocus();
         },
         child: Container(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage('assets/images/background_image.png'),
+              image: AssetImage('assets/images/background.png'),
               fit: BoxFit.cover,
+              colorFilter: ColorFilter.mode(
+                Colors.black.withOpacity(0.3),
+                BlendMode.darken,
+              ),
             ),
           ),
           child: Center(
@@ -152,7 +156,7 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
                           controller: nameController,
                           enabledBorder: OutlineInputBorder(
                             borderSide: const BorderSide(
-                              color: Color(0xffd1d8ff),
+                              color: Color(0xFF205761),
                             ),
                             borderRadius: BorderRadius.circular(14),
                           ),
@@ -165,7 +169,7 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
                           controller: surnameController,
                           enabledBorder: OutlineInputBorder(
                             borderSide: const BorderSide(
-                              color: Color(0xffd1d8ff),
+                              color: Color(0xFF205761),
                             ),
                             borderRadius: BorderRadius.circular(14),
                           ),
@@ -178,7 +182,7 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
                           controller: emailController,
                           enabledBorder: OutlineInputBorder(
                             borderSide: const BorderSide(
-                              color: Color(0xffd1d8ff),
+                              color: Color(0xFF205761),
                             ),
                             borderRadius: BorderRadius.circular(14),
                           ),
@@ -254,7 +258,7 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
                               borderSide: const BorderSide(
-                                color: Color(0xffd1d8ff),
+                                color: Color(0xFF205761),
                               ),
                               borderRadius: BorderRadius.circular(14),
                             ),
@@ -348,6 +352,8 @@ class _MemoryEntryPageState extends State<MemoryEntryPage> {
                             });
                           },
                           controlAffinity: ListTileControlAffinity.leading,
+                          tileColor: Color(0xFF205761),
+                          checkColor: Colors.white,
                         ),
                         SizedBox(height: 5),
                         CustomButton(

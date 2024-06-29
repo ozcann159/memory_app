@@ -13,7 +13,9 @@ class CustomDropdownField extends StatefulWidget {
     required this.items,
     required this.labelText,
     required this.onChanged,
-    this.validator, required bool filled, required Color fillColor,
+    this.validator,
+    required bool filled,
+    required Color fillColor,
   }) : super(key: key);
 
   @override
@@ -32,8 +34,8 @@ class _CustomDropdownFieldState extends State<CustomDropdownField> {
         filled: true,
         fillColor: Colors.white.withOpacity(0.5),
         border: OutlineInputBorder(
-          borderSide: const BorderSide(
-            color: Color(0xffd1d8ff),
+          borderSide: BorderSide(
+            color: Color(0xFF205761),
           ),
           borderRadius: BorderRadius.circular(14),
         ),

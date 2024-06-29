@@ -16,7 +16,7 @@ class AppTextTheme {
   );
 
   static TextStyle kLabelStyle = GoogleFonts.inter(
-    color: Color.fromARGB(255, 239, 239, 239),
+    color: Color(0xFF205761),
     fontWeight: FontWeight.w500,
     fontSize: 16,
   );

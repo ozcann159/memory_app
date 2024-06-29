@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:memory_app/bloc/memory_bloc.dart';
 import 'package:memory_app/firebase_options.dart';
 import 'package:memory_app/pages/admin_login.dart';
+import 'package:memory_app/pages/home_page.dart';
 import 'package:memory_app/pages/memories_list_screen.dart.dart';
 import 'package:memory_app/pages/memory_approval_page.dart';
 import 'package:memory_app/pages/memory_entry_page.dart';
@@ -35,7 +36,7 @@ class MyApp extends StatelessWidget {
         title: 'Hatıra Defteri',
         initialRoute: '/',
         routes: {
-          '/': (context) => MemoryListPage(), // homepage gelecek !!
+          '/': (context) => HomePage(), // homepage gelecek !!
 
           '/memories': (context) => MemoryListPage(),
           '/memory-form': (context) => MemoryEntryPage(),

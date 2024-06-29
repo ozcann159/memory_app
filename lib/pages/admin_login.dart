@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
 class AdminLoginPage extends StatefulWidget {
   @override
@@ -17,29 +17,66 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Admin Girişi'),
+        backgroundColor: Color(0xFF205761), // AppBar arka plan rengi
       ),
+      backgroundColor: Colors.white, // Scaffold arka plan rengi
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextField(
               controller: emailController,
-              decoration: InputDecoration(labelText: 'Email'),
+              decoration: InputDecoration(
+                labelText: 'Email',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                filled: true,
+                fillColor: Colors.white,
+              ),
             ),
+            SizedBox(height: 20),
             TextField(
               controller: passwordController,
-              decoration: InputDecoration(labelText: 'Password'),
+              decoration: InputDecoration(
+                labelText: 'Password',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                filled: true,
+                fillColor: Colors.white,
+              ),
               obscureText: true,
             ),
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: _login,
-              child: Text('Giriş'),
+              child: Text(
+                'Giriş',
+                style: TextStyle(
+                  fontFamily: 'Open Sans',
+                  fontSize: 16,
+                  color: Colors.white,
+                ),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFF205761),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+              ),
             ),
             if (errorMessage.isNotEmpty)
-              Text(
-                errorMessage,
-                style: TextStyle(color: Colors.red),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                child: Text(
+                  errorMessage,
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 16.0,
+                  ),
+                ),
               ),
           ],
         ),
