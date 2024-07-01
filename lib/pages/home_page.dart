@@ -68,6 +68,26 @@ class HomePage extends StatelessWidget {
                     ),
                   ),
                 ),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/memories');
+                  },
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(200, 50),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 16, horizontal: 24),
+                    backgroundColor: const Color(0xFF205761),
+                  ),
+                  child: const Text(
+                    'Onaylanan Hatıralar',
+                    style: TextStyle(
+                      fontFamily: 'Open Sans',
+                      fontSize: 16,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
